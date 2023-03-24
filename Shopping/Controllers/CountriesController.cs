@@ -15,14 +15,17 @@ namespace Shopping.Controllers
         }
 
         // GET: Countries
+        //Consulta asincrona, usuario quiere ver paises le pasa el Index
         public async Task<IActionResult> Index()
         {
             return _context.Countries != null ?
+                        //En la vista nos muestra la lista de paises => SELECT * FROM COUNTRIES
                         View(await _context.Countries.ToListAsync()) :
                         Problem("Entity set 'DataContext.Countries'  is null.");
         }
 
         // GET: Countries/Details/5
+        //? => puede que sea nulo
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Countries == null)
@@ -32,15 +35,18 @@ namespace Shopping.Controllers
 
             var country = await _context.Countries
                 .FirstOrDefaultAsync(m => m.Id == id);
+            //Si es nulo retorna notfound
             if (country == null)
             {
                 return NotFound();
             }
-
+            //Si existe retorna la vista country
             return View(country);
         }
 
         // GET: Countries/Create
+        //Agregado
+        [HttpGet]
         public IActionResult Create()
         {
             return View();
@@ -51,12 +57,13 @@ namespace Shopping.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name")] Country country)
+        public async Task<IActionResult> Create(Country country)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(country);
                 await _context.SaveChangesAsync();
+                //Si ha podido crear el pais lo devolvemos a la accion Index
                 return RedirectToAction(nameof(Index));
             }
             return View(country);
