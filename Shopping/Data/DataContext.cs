@@ -11,13 +11,15 @@ namespace Shopping.Data
         }
 
         //Por cada entidad hay que mapearlo
+        public DbSet<Category> Categories { get; set; }
         public DbSet<Country> Countries { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            //c de Country
-            //Creacion de campo único sobre el campo name
+            //Creacion de campo único sobre el campo name para category y country
+            modelBuilder.Entity<Category>().HasIndex(c => c.Name).IsUnique();
             modelBuilder.Entity<Country>().HasIndex(c => c.Name).IsUnique();
         }
     }

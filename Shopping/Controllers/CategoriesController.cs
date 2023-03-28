@@ -5,48 +5,20 @@ using Shopping.Data.Entities;
 
 namespace Shopping.Controllers
 {
-    public class CountriesController : Controller
+    public class CategoriesController : Controller
     {
         private readonly DataContext _context;
 
-        public CountriesController(DataContext context)
-        {
+        public CategoriesController(DataContext context) {
             _context = context;
         }
-
-        // GET: Countries
-        //Consulta asincrona, usuario quiere ver paises le pasa el Index
         public async Task<IActionResult> Index()
         {
-            return _context.Countries != null ?
+            return _context.Categories != null ?
                         //En la vista nos muestra la lista de paises => SELECT * FROM COUNTRIES
-                        View(await _context.Countries.ToListAsync()) :
-                        Problem("Entity set 'DataContext.Countries'  is null.");
+                        View(await _context.Categories.ToListAsync()) :
+                        Problem("Entity set 'DataContext.Categories'  is null.");
         }
-
-        // GET: Countries/Details/5
-        //? => puede que sea nulo
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null || _context.Countries == null)
-            {
-                return NotFound();
-            }
-
-            var country = await _context.Countries
-                .FirstOrDefaultAsync(m => m.Id == id);
-            //Si es nulo retorna notfound
-            if (country == null)
-            {
-                return NotFound();
-            }
-            //Si existe retorna la vista country
-            return View(country);
-        }
-
-        // GET: Countries/Create
-        //Agregado
-        [HttpGet]
         public IActionResult Create()
         {
             return View();
@@ -57,13 +29,13 @@ namespace Shopping.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Country country)
+        public async Task<IActionResult> Create(Category category)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Add(country);
+                    _context.Add(category);
                     await _context.SaveChangesAsync();
                     //Si ha podido crear el pais lo devolvemos a la accion Index
                     return RedirectToAction(nameof(Index));
@@ -76,7 +48,7 @@ namespace Shopping.Controllers
                     if (dbUpdateException.InnerException.Message.Contains("duplicate"))
                     {
                         //
-                        ModelState.AddModelError(string.Empty, "Ya existe un país con este nombre.");
+                        ModelState.AddModelError(string.Empty, "Ya existe una categoría con este nombre.");
                     }
                     else
                     {
@@ -89,35 +61,48 @@ namespace Shopping.Controllers
                     ModelState.AddModelError(string.Empty, exception.Message);
                 }
             }
-            return View(country);
+            return View(category);
         }
 
-        // GET: Countries/Edit/5
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null || _context.Categories == null)
+            {
+                return NotFound();
+            }
+
+            var category = await _context.Categories
+                .FirstOrDefaultAsync(m => m.Id == id);
+            //Si es nulo retorna notfound
+            if (category == null)
+            {
+                return NotFound();
+            }
+            //Si existe retorna la vista country
+            return View(category);
+        }
 
         public async Task<IActionResult> Edit(int? id)
         {
             //Esto es debido a que puede venir el id escrita desde la URL, si no encuentra el id retorna NotFound
-            if (id == null || _context.Countries == null)
+            if (id == null || _context.Categories == null)
             {
                 return NotFound();
             }
 
-            var country = await _context.Countries.FindAsync(id);
-            if (country == null)
+            var category = await _context.Categories.FindAsync(id);
+            if (category == null)
             {
                 return NotFound();
             }
-            return View(country);
+            return View(category);
         }
 
-        // POST: Countries/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Country country)
+        public async Task<IActionResult> Edit(int id, Category category)
         {
-            if (id != country.Id)
+            if (id != category.Id)
             {
                 return NotFound();
             }
@@ -126,7 +111,7 @@ namespace Shopping.Controllers
             {
                 try
                 {
-                    _context.Update(country);
+                    _context.Update(category);
                     await _context.SaveChangesAsync();
                     //Esto al editar y pulsar enter me redirige a la vista Index
                     return RedirectToAction(nameof(Index));
@@ -148,51 +133,44 @@ namespace Shopping.Controllers
                     ModelState.AddModelError(string.Empty, exception.Message);
                 }
             }
-            return View(country);
+            return View(category);
         }
-
 
         // GET: Countries/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Countries == null)
+            if (id == null || _context.Categories == null)
             {
                 return NotFound();
             }
 
-            var country = await _context.Countries
+            var category = await _context.Categories
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (country == null)
+            if (category == null)
             {
                 return NotFound();
             }
 
-            return View(country);
+            return View(category);
         }
-
         // POST: Countries/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Countries == null)
+            if (_context.Categories == null)
             {
                 return Problem("Entity set 'DataContext.Countries'  is null.");
             }
-            var country = await _context.Countries.FindAsync(id);
-            if (country != null)
+            var category = await _context.Categories.FindAsync(id);
+            if (category != null)
             {
-                _context.Countries.Remove(country);
+                _context.Categories.Remove(category);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        /*      Esto es inncesario
-        private bool CountryExists(int id)
-        {
-            return (_context.Countries?.Any(e => e.Id == id)).GetValueOrDefault();
-        }*/
     }
 }
