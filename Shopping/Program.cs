@@ -16,6 +16,10 @@ builder.Services.AddDbContext<DataContext>(o =>
 });
 
 
+//Preparar el BUILD antes de correrlo
+//Cualquier cambio en caliente con esta linea no hay necesidad de ejeuctar y compilar el programa, simplemente refrescar navegador
+builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
+
 
 var app = builder.Build();
 

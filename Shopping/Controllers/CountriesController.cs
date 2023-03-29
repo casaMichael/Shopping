@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Shopping.Data;
 using Shopping.Data.Entities;
+using Shopping.Models;
 
 namespace Shopping.Controllers
 {
@@ -18,10 +19,14 @@ namespace Shopping.Controllers
         //Consulta asincrona, usuario quiere ver paises le pasa el Index
         public async Task<IActionResult> Index()
         {
-            return _context.Countries != null ?
+            /*return _context.Countries != null ?
                         //En la vista nos muestra la lista de paises => SELECT * FROM COUNTRIES
                         View(await _context.Countries.ToListAsync()) :
-                        Problem("Entity set 'DataContext.Countries'  is null.");
+                        Problem("Entity set 'DataContext.Countries'  is null.");*/
+            //Equivalente a hacer un INNER JOIN en la consulta
+            return View(await _context.Countries
+                .Include(c => c.States)
+                .ToListAsync());
         }
 
         // GET: Countries/Details/5
@@ -34,6 +39,8 @@ namespace Shopping.Controllers
             }
 
             var country = await _context.Countries
+                //Va a incluir el state
+                .Include(c => c.States)
                 .FirstOrDefaultAsync(m => m.Id == id);
             //Si es nulo retorna notfound
             if (country == null)
@@ -49,7 +56,9 @@ namespace Shopping.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            return View();
+            Country country = new() { States = new List<State>()};
+            //Le mandamos a la vista la lista de states
+            return View(country);
         }
 
         // POST: Countries/Create
@@ -59,6 +68,8 @@ namespace Shopping.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Country country)
         {
+            //Valido los names pero los states no 
+            //le mandamos la lista de states vacia
             if (ModelState.IsValid)
             {
                 try
@@ -92,8 +103,154 @@ namespace Shopping.Controllers
             return View(country);
         }
 
-        // GET: Countries/Edit/5
+        public async Task<IActionResult> AddState(int? id)
+        {
+            //Esto es debido a que puede venir el id escrita desde la URL, si no encuentra el id retorna NotFound
+            if (id == null || _context.Countries == null)
+            {
+                return NotFound();
+            }
+            //EL id corresponde al pais
+            Country country = await _context.Countries.FindAsync(id);
+            if (country == null)
+            {
+                return NotFound();
+            }
 
+            StateViewModel model = new()
+            {
+                //lo unico que se es el countryid
+                CountryId = country.Id,
+            };
+
+            //Le pasamos el model a la vista
+            return View(model);
+        }
+
+        // POST: Countries/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        //
+        public async Task<IActionResult> AddState(StateViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    //Si objeto es valido adiciono estado con lo que venga del modelo
+                    State state = new()
+                    {
+                        Cities = new List<City>(),
+                        Country = await _context.Countries.FindAsync(model.CountryId),
+                        //Lo que el usuario digito en el name
+                        Name = model.Name,
+                    };
+
+
+                    _context.Add(state);
+                    await _context.SaveChangesAsync();
+                    //Se guarda los cambios pero que devuelva a la vista Details
+                    return RedirectToAction(nameof(Details), new { Id = model.CountryId});
+                }
+                //DbUpdateException fallo actualización
+                catch (DbUpdateException dbUpdateException)
+                {
+                    //Excepcion por duplicado
+                    //Excepcion que contiene palabra duplicado
+                    if (dbUpdateException.InnerException.Message.Contains("duplicate"))
+                    {
+                        //
+                        ModelState.AddModelError(string.Empty, "Ya existe un departamento/estado en este país.");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, dbUpdateException.InnerException.Message);
+                    }
+                }
+                //Excepcion general
+                catch (Exception exception)
+                {
+                    ModelState.AddModelError(string.Empty, exception.Message);
+                }
+            }
+            return View(model);
+        }
+
+        public async Task<IActionResult> EditState(int? id)
+            //El id representa un estado
+        {
+            //Esto es debido a que puede venir el id escrita desde la URL, si no encuentra el id retorna NotFound
+            if (id == null || _context.Countries == null)
+            {
+                return NotFound();
+            }
+
+            State state = await _context.States
+                .Include(s=>s.Country)
+                .FirstOrDefaultAsync(s=>s.Id == id);
+            if (state == null)
+            {
+                return NotFound();
+            }
+
+            StateViewModel model = new()
+            {
+                CountryId = state.Country.Id,
+                //El id sale del state.id y nombre tambien
+                Id = state.Id,
+                Name = state.Name,
+            };
+            return View(model);
+        }
+
+        // POST: Countries/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditState(int id, StateViewModel model)
+        {
+            if (id != model.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    State state = new()
+                    {
+                        Id = model.Id,
+                        Name = model.Name,
+                    };
+                    //Nos actualiza el state(estado/departamento)
+                    _context.Update(state);
+                    await _context.SaveChangesAsync();
+                    //Esto al editar y pulsar enter me redirige a la vista Index
+                    return RedirectToAction(nameof(Details), new { Id = model.CountryId });
+                }
+                //Validación de duplicados
+                catch (DbUpdateException dbUpdateException)
+                {
+                    if (dbUpdateException.InnerException.Message.Contains("duplicate"))
+                    {
+                        ModelState.AddModelError(string.Empty, "Ya existe un departamento/estado con el mismo nombre en este pais.");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, dbUpdateException.InnerException.Message);
+                    }
+                }
+                catch (Exception exception)
+                {
+                    ModelState.AddModelError(string.Empty, exception.Message);
+                }
+            }
+            return View(model);
+        }
         public async Task<IActionResult> Edit(int? id)
         {
             //Esto es debido a que puede venir el id escrita desde la URL, si no encuentra el id retorna NotFound
@@ -161,7 +318,8 @@ namespace Shopping.Controllers
             }
 
             var country = await _context.Countries
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .Include(c => c.States)
+                .FirstOrDefaultAsync(c => c.Id == id);
             if (country == null)
             {
                 return NotFound();
