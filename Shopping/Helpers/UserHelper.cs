@@ -1,23 +1,51 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Shopping.Data;
 using Shopping.Data.Entities;
 
 namespace Shopping.Helpers
 {
     public class UserHelper : IUserHelper
+
     {
-        public Task<IdentityResult> AddUserAsync(User user, string password)
+        public DataContext _context { get; }
+        public UserManager<User> _userManager { get; }
+        public RoleManager<IdentityRole> _roleManager { get; }
+
+        //Inyectamos DataContext, UserManager(basado en mi clase de usuarios) y RoleManager
+        public UserHelper(DataContext context, UserManager<User> userManager, RoleManager<IdentityRole> roleManager) 
         {
-            throw new NotImplementedException();
+            _context = context;
+            _userManager = userManager;
+            _roleManager = roleManager;
         }
 
-        public Task AddUserToRoleAsync(User user, string roleName)
+        public async Task<IdentityResult> AddUserAsync(User user, string password)
         {
-            throw new NotImplementedException();
+            //vaya a la clase usermanager metodo create le pasamos user y password
+            return await _userManager.CreateAsync(user, password);
         }
 
-        public Task CheckRoleAsync(string roleName)
+        public async Task AddUserToRoleAsync(User user, string roleName)
         {
-            throw new NotImplementedException();
+            //claser usermanager metodo addtorole pasamos usario y nombre del rol
+            await _userManager.AddToRoleAsync(user, roleName);
+        }
+
+        public async Task CheckRoleAsync(string roleName)
+        {
+            //Metodo 
+            bool roleExists = await _roleManager.RoleExistsAsync(roleName);
+            //Si rol no existe lo crea
+            if (!roleExists)
+            {
+                //se dirige al metodo crear rol
+                await _roleManager.CreateAsync(new IdentityRole
+                {
+                    //Crear rol con el nombre que el usuario mando
+                    Name = roleName
+                });
+            }
+
         }
 
         public Task<User> GetUserAsync(string email)
