@@ -1,33 +1,86 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Shopping.Data;
 using Shopping.Data.Entities;
+using Shopping.Models;
 
 namespace Shopping.Helpers
 {
+
     public class UserHelper : IUserHelper
+
     {
-        public Task<IdentityResult> AddUserAsync(User user, string password)
+        private readonly DataContext _context;
+        //userManager administrar usuarios
+        private readonly UserManager<User> _userManager;
+        //Manejador de roles
+        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly SignInManager<User> _signInManager;
+
+        //Inyectamos DataContext, UserManager(basado en mi clase de usuarios) y RoleManager
+        public UserHelper(DataContext context, UserManager<User> userManager, RoleManager<IdentityRole> roleManager, SignInManager<User> signInManager)
+        {    
+            _context = context;
+            _userManager = userManager;
+            _roleManager = roleManager;
+            _signInManager = signInManager;
+        }
+    
+
+        public async Task<IdentityResult> AddUserAsync(User user, string password)
         {
-            throw new NotImplementedException();
+            //vaya a la clase usermanager metodo create le pasamos user y password
+            return await _userManager.CreateAsync(user, password);
         }
 
-        public Task AddUserToRoleAsync(User user, string roleName)
+        public async Task AddUserToRoleAsync(User user, string roleName)
         {
-            throw new NotImplementedException();
+            //clase usermanager metodo addtorole pasamos usario y nombre del rol
+            await _userManager.AddToRoleAsync(user, roleName);
         }
 
-        public Task CheckRoleAsync(string roleName)
+        public async Task CheckRoleAsync(string roleName)
         {
-            throw new NotImplementedException();
+            //Metodo 
+            bool roleExists = await _roleManager.RoleExistsAsync(roleName);
+            //Si rol no existe lo crea
+            if (!roleExists)
+            {
+                //se dirige al metodo crear rol
+                await _roleManager.CreateAsync(new IdentityRole
+                {
+                    //Crear rol con el nombre que el usuario mando
+                    Name = roleName
+                });
+            }
+
         }
 
-        public Task<User> GetUserAsync(string email)
+        public async Task<User> GetUserAsync(string email)
         {
-            throw new NotImplementedException();
+            //Se va al contexto datos y busque usuario
+            return await _context.Users
+                   //Me devuelve usaurio y ciudad
+                   .Include(u => u.City)
+                   .FirstOrDefaultAsync(u => u.Email == email);
+
         }
 
-        public Task<bool> IsUserInRoleAsync(User user, string roleName)
+        public async Task<bool> IsUserInRoleAsync(User user, string roleName)
         {
-            throw new NotImplementedException();
+            //Chekea el rol en usermanager
+            return await _userManager.IsInRoleAsync(user, roleName);
+        }
+
+        public async Task<SignInResult> LoginAsync(LoginViewModel model)
+        {
+            //False evita bloquear el usuario después de poner password mal
+            return await _signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberMe, false);
+        }
+
+        public async Task LogoutAsync()
+        {
+            await _signInManager.SignOutAsync();
         }
     }
 }

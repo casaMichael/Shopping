@@ -1,10 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Shopping.Data;
 using Shopping.Data.Entities;
+using System.Data;
 
 namespace Shopping.Controllers
 {
+    //Solo administrador puede manipular categorias. Tambien se le puede poner a cada acción
+
+    //TODO: Verificar [Authorize(Roles = "Admin")] al descomentarlo no me muestra nada en la página
+    //[Authorize(Roles = "Admin")]
     public class CategoriesController : Controller
     {
         private readonly DataContext _context;

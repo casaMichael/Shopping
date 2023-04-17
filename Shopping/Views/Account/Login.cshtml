@@ -1,0 +1,109 @@
+﻿@model Shopping.Models.LoginViewModel
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+<!-- CONTENT
+
+================================================== -->
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-5 col-xl-4 my-5">
+
+            <!-- Heading -->
+            <h1 class="display-4 text-center mb-3">
+                Iniciar sesión
+            </h1>
+
+            <!-- Subheading -->
+            <p class="text-muted text-center mb-5">
+                Acceso al panel de control
+            </p>
+
+            <!-- Form -->
+            <form asp-action="Login">
+
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <!-- Email address -->
+                <div class="form-group">
+
+                    <!-- Label -->
+                    <label class="form-label" asp-for="Username">
+                        Correo electrónico
+                    </label>
+
+                    <!-- Input -->
+                    <input asp-for="Username" type="email" class="form-control" placeholder="name@address.com">
+                    <!-- Span -->
+                    <span asp-validation-for="Username" class="text-danger"></span>
+                </div>
+
+                <!-- Password -->
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col">
+
+                            <!-- Label -->
+                            <label class="form-label" asp-for="Password">
+                                Contraseña
+                            </label>
+
+                        </div>
+                        <div class="col-auto">
+
+                            <!-- Help text -->
+                            <a href="password-reset-cover.html" class="form-text small text-muted">
+                                ¿Recuperar contraseña?
+                            </a>
+
+                        </div>
+                    </div> <!-- / .row -->
+                    <!-- Input group -->
+                    <div class="input-group input-group-merge">
+
+                        <!-- Input -->
+                        <input asp-for="Password" class="form-control" type="password" placeholder="Introduzca contraseña">
+
+                        <!-- Icon -->
+                        <span class="input-group-text">
+                            <i class="fe fe-eye"></i>
+                        </span>
+
+                    </div>
+
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+
+                <!-- Remember -->
+                <div class="form-group">
+                    <div class="form-check">
+                        <input asp-for="RememberMe" type="checkbox" class="form-check-input" />
+                        <label asp-for="RememberMe" class="form-check-label"></label>
+                    </div>
+
+                </div>
+
+
+                <!-- Submit -->
+                <button class="btn btn-lg w-100 btn-primary mb-3" asp-area="" asp-controller="Account" asp-action="Login">
+                    Iniciar
+                </button>
+
+                <!-- Link -->
+                <div class="text-center">
+                    <small class="text-muted text-center">
+                        Don't have an account yet? <a href="sign-up.html">Sign up</a>.
+                    </small>
+                </div>
+
+            </form>
+
+        </div>
+    </div> <!-- / .row -->
+</div> <!-- / .container -->
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Shopping.Data.Entities;
+using Shopping.Models;
 
 namespace Shopping.Helpers
 {
@@ -19,6 +20,11 @@ namespace Shopping.Helpers
 
         //Verifica es administrador ok sino no
         Task<bool> IsUserInRoleAsync(User user, string roleName);
+
+        //SignInResult es un objeto que nos dice si pudo o no pudo logearse
+        Task<SignInResult> LoginAsync(LoginViewModel model);
+
+        Task LogoutAsync();
 
     }
 }

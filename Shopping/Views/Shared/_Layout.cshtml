@@ -18,32 +18,57 @@
     <link rel="stylesheet" href="~/Shopping.styles.css" asp-append-version="true" />
 </head>
 <body>
-        <!--Navegation-->
-        <nav class="navbar navbar-vertical fixed-start navbar-expand-md navbar-dark" id="sidebar">
-            <div class="container-fluid">
-                <!-- Logotipo-->
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Shopping</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+    <!--Navegation-->
+    <nav class="navbar navbar-vertical fixed-start navbar-expand-md navbar-dark" id="sidebar">
+        <div class="container-fluid">
+            <!-- Logotipo-->
+            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Shopping</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
             <ul class="navbar-nav flex-grow-1">
+
                 <li class="nav-item">
-                    <a class="nav-link text-light link-secondary fe fe-home" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                    <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Index">Inicio</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-light link-secondary fe fe-eye" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                    <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Privacy">Políticas</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link text-light link-secondary fe fe-globe" asp-area="" asp-controller="Countries" asp-action="Index">Paises</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-light link-secondary fe fe-grid" asp-area="" asp-controller="Categories" asp-action="Index">Categorias</a>
-                </li>
-                </ul>
-            </div>
-        </nav>
-        <!--Main Content-->
+                @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                {
+                    <li class="nav-item">
+                        <a class="nav-link text-light" asp-area="" asp-controller="Categories" asp-action="Index">Categorías</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-light" asp-area="" asp-controller="Countries" asp-action="Index">Países</a>
+                    </li>
+                }
+            </ul>
+                <div class="navbar-user d-none d-md-flex" id="sidebarUser" >
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                    <li class="nav-item">
+                        <a class="nav-link text-light" asp-area="" asp-controller="Account" asp-action="ChangeUser">@User.Identity.Name</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-light" asp-area="" asp-controller="Account" asp-action="Logout">Cerrar Sesión</a>
+                    </li>
+                    }
+                    else
+                    {
+                    <li class="nav-item">
+                        <a class="nav-link text-light" asp-area="" asp-controller="Account" asp-action="Login">Iniciar Sesión</a>
+                    </li>
+                    }
+
+                </div>  
+
+         </div>
+    </nav>
+
+
+    <!--Main Content-->
     <div class="main-content">
         <div class="container-fluid">
             <main role="main" class="pb-3">
@@ -60,6 +85,12 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <!-- Vendor JS -->
+    <script src="~/assets/js/vendor.bundle.js"></script>
+    <!-- Theme JS -->
+    <script src="~/assets/js/theme.bundle.js"></script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

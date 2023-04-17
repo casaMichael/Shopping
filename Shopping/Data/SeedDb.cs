@@ -1,11 +1,18 @@
-﻿namespace Shopping.Data.Entities;
+﻿using Shopping.Enums;
+using Shopping.Helpers;
+
+namespace Shopping.Data.Entities;
 
 public class SeedDb
 {
     private readonly DataContext _context;
-    public SeedDb(DataContext context)
+    private readonly IUserHelper _userHelper;
+
+    //Inyeccion permanezca en toda la clase (IUserHelper)
+    public SeedDb(DataContext context, IUserHelper userHelper)
     {
         _context = context;
+        _userHelper = userHelper;
     }
     public async Task SeedAsync()
     {
@@ -13,7 +20,50 @@ public class SeedDb
         await _context.Database.EnsureCreatedAsync();
         await CheckCategoriesAsync();
         await CheckCountriesAsync();
+        //Chekea los roles
+        await CheckRolesAsync();
+        //Yopmail correo válido pero falso. Sirve para pruebas.
+        await CheckUserAsync("101010", "Michael", "Casa", "casa@yopmail.com", "654 321", "Calle Guadalajara", UserType.Admin);
+        await CheckUserAsync("303030", "Alejando", "Ushca", "alex@yopmail.com", "123 456", "Calle Segovia", UserType.User);
+    }
 
+    private async Task<User> CheckUserAsync(
+    string document,
+    string firstName,
+    string lastName,
+    string email,
+    string phone,
+    string address,
+    UserType userType)
+    {
+        User user = await _userHelper.GetUserAsync(email);
+        if (user == null)
+        {
+            //Creación de objeto User
+            user = new User
+            {
+                FirstName = firstName,
+                LastName = lastName,
+                Email = email,
+                UserName = email,
+                PhoneNumber = phone,
+                Address = address,
+                Document = document,
+                City = _context.Cities.FirstOrDefault(),
+                UserType = userType,
+            };
+
+            await _userHelper.AddUserAsync(user, "123456");
+            await _userHelper.AddUserToRoleAsync(user, userType.ToString());
+        }
+
+        return user;
+    }
+
+    private async Task CheckRolesAsync()
+    {
+        await _userHelper.CheckRoleAsync(UserType.Admin.ToString());
+        await _userHelper.CheckRoleAsync(UserType.User.ToString());
     }
 
     private async Task CheckCountriesAsync()
