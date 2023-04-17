@@ -48,6 +48,8 @@ builder.Services.AddTransient<SeedDb>();
 //Se crea una nueva instancia una sola vez por cada request(petición)
 
 builder.Services.AddScoped<IUserHelper, UserHelper>();
+//Cada que alguien llame al combo helper pasame la clase combohelper
+builder.Services.AddScoped<ICombosHelper, CombosHelper>();
 
 //Preparar el BUILD antes de correrlo
 //Cualquier cambio en caliente con esta linea no hay necesidad de ejeuctar y compilar el programa, simplemente refrescar navegador
