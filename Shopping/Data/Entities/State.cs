@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Shopping.Data.Entities
 {
@@ -11,7 +12,9 @@ namespace Shopping.Data.Entities
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
         public string Name { get; set; }
 
+        //Esto sirve para deserializar el json
         //Relacion 1 a N Un estado pertenece a un pais. UN ESTADO PERTENECE A UN PAIS
+        [JsonIgnore]
         public Country Country { get; set; }
 
         //Un estado tiene una lista (de ciudades)

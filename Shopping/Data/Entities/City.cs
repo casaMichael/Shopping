@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Shopping.Data.Entities
 {
@@ -12,6 +13,7 @@ namespace Shopping.Data.Entities
         public string Name { get; set; }
 
         //Una ciudad pertenece a un estado
+        [JsonIgnore]
         public State State { get; set; }
 
         //Una ciudad tiene muchos usuarios

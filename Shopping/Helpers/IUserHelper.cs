@@ -11,6 +11,7 @@ namespace Shopping.Helpers
 
         //Método AddUserAsync agregar usuario y pasar el password(mayusucla miniscula caracteres epeciales)
         Task<IdentityResult> AddUserAsync(User user, string password);
+        Task<User> AddUserAsync(AddUserViewModel model);
 
         //Si no exite un rol lo creara
         Task CheckRoleAsync(string roleName);

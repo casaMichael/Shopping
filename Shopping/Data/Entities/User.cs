@@ -20,7 +20,8 @@ namespace Shopping.Data.Entities
         [MaxLength(50, ErrorMessage = "El campo {0} debe tener máximo {1} caractéres.")]
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
         public string LastName { get; set; }
-        
+
+        //Grabo la ciudad de forma implicita: quiere decir que no pido pais ni estado
         [Display(Name = "Ciudad")]
         public City City { get; set; }
 
@@ -33,17 +34,17 @@ namespace Shopping.Data.Entities
         public Guid ImageId { get; set; }
         //Guid: código único alfanumérico como un token
 
-        //TODO: Pending to put the correct paths
         [Display(Name = "Foto")]
         public string ImageFullPath => ImageId == Guid.Empty
             //Ruta de perf
             ? $"https://localhost:7018/assets/img/no-image.png"
-            : $"https://shoppingprep.blob.core.windows.net/users/{ImageId}";
+            //Mi blob se llama shoppingcasamichael
+            : $"https://shoppingcasamichael.blob.core.windows.net/users/{ImageId}";
 
         [Display(Name = "Tipo de usuario")]
         public UserType UserType { get; set; }
 
-        
+
         [Display(Name = "Usuario")]
         public string FullName => $"{FirstName} {LastName}";
 
