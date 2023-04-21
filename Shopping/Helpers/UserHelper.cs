@@ -121,7 +121,7 @@ namespace Shopping.Helpers
         public async Task<SignInResult> LoginAsync(LoginViewModel model)
         {
             //False evita bloquear el usuario después de poner password mal
-            return await _signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberMe, false);
+            return await _signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberMe, true);
         }
 
         public async Task LogoutAsync()

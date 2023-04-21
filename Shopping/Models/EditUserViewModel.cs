@@ -42,7 +42,8 @@ namespace Shopping.Models
             : $"https://shoppingcasamichael.blob.core.windows.net/users/{ImageId}";
 
         [Display(Name = "Image")]
-        public IFormFile ImageFile { get; set; }
+        //Campo opcional referido a la foto, si el signo ? es obligatorio cambiar la foto. Algun usuario no quisiera cambiar la foto solo datos
+        public IFormFile ? ImageFile { get; set; }
 
         [Display(Name = "País")]
         //Range: la opcion 0 no sirve CombosHelper linea 61

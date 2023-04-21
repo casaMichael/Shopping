@@ -32,6 +32,13 @@ builder.Services.AddIdentity<User, IdentityRole>(cfg =>
     cfg.Password.RequireUppercase = false;
     //Longitud requerida de password
     //cfg.Password.RequiredLength = 6;
+    //Bloquear usuario durante 1 minuto
+    cfg.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(1);
+    //Intento 3 veces
+    cfg.Lockout.MaxFailedAccessAttempts = 3;
+    //Al nuevo usuario tambien lo podemos bloquear
+    cfg.Lockout.AllowedForNewUsers = true;
+
 }).AddEntityFrameworkStores<DataContext>();
 
 //Para mostrar página de autorización

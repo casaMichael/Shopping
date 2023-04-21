@@ -45,7 +45,15 @@ namespace Shopping.Controllers
                     return RedirectToAction("Index", "Home");
                 }
 
-                ModelState.AddModelError(string.Empty, "Email o contraseña incorrectos.");
+            //Contraseña bloqueada o contraseña incorrecta
+                if (result.IsLockedOut)
+                {
+                    ModelState.AddModelError(string.Empty, "Ha superado el número máximo de intentos, cuenta bloqueada intentelo en unos minutos");
+                }
+                else
+                {
+                   ModelState.AddModelError(string.Empty, "Email o contraseña incorrectos.");
+                }    
             }
 
             return View(model);
