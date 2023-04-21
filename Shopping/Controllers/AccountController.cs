@@ -65,6 +65,7 @@ namespace Shopping.Controllers
         }
 
         //GET Crear nuevo usuario
+        //Esta acción esta dentro de este controlador porque NO hay que estar logeado para poder registrarse
         public async Task<IActionResult> Register()
         {
             AddUserViewModel model = new()
@@ -160,5 +161,123 @@ namespace Shopping.Controllers
 
             return Json(state.Cities.OrderBy(c => c.Name));
         }
+
+        public async Task<IActionResult> ChangeUser()
+        {
+            //Identity nos da el usuario logeado
+            User user = await _userHelper.GetUserAsync(User.Identity.Name);
+
+            //Validación por seguridad, usuario no existe
+            if (user == null)
+            {
+                return NotFound();
+            }
+            //Cogemos el modelo EditUserViewmodel para rellenar campos
+            EditUserViewModel model = new()
+            {
+                Address = user.Address,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                PhoneNumber = user.PhoneNumber,
+                ImageId = user.ImageId,
+                //Mostrar ciudad del estado del usuario
+                Cities = await _combosHelper.GetComboCitiesAsync(user.City.State.Id),
+                //Ciudad seleccionada la que el usuario tiene
+                CityId = user.City.Id,
+                Countries = await _combosHelper.GetComboCountriesAsync(),
+                //País seleccionado
+                CountryId = user.City.State.Country.Id,
+                StateId = user.City.State.Id,
+                States = await _combosHelper.GetComboStatesAsync(user.City.State.Country.Id),
+                Id = user.Id,
+                Document = user.Document
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangeUser(EditUserViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                //Al entrar el usuario cambiara o no la imagen, asi que la guardamos
+                Guid imageId = model.ImageId;
+
+                //Si ImageFile es diferente a nulo, entonces usuario actualizo imagen
+                if (model.ImageFile != null)
+                {
+                    //Subimos la foto al contenedor de users
+                    imageId = await _blobHelper.UploadBlobAsync(model.ImageFile, "users");
+                }
+                //Obtenemos el usuario actual y actualizamos los campos actualizables
+                User user = await _userHelper.GetUserAsync(User.Identity.Name);
+
+                user.FirstName = model.FirstName;
+                user.LastName = model.LastName;
+                user.Address = model.Address;
+                user.PhoneNumber = model.PhoneNumber;
+                user.ImageId = imageId;
+                user.City = await _context.Cities.FindAsync(model.CityId);
+                user.Document = model.Document;
+
+                //Mandamos a la base de datos y despues la accion index
+                await _userHelper.UpdateUserAsync(user);
+                return RedirectToAction("Index", "Home");
+            }
+
+            //Para capturar los datos y que no se pierdan ciudad/estado/pais seleccionados
+            model.Countries = await _combosHelper.GetComboCountriesAsync();
+            //CountryId es lo que el usuario eligio en el select
+            model.States = await _combosHelper.GetComboStatesAsync(model.CountryId);
+            model.Cities = await _combosHelper.GetComboCitiesAsync(model.StateId);
+            return View(model);
+        }
+        //Get: le manda la vista, le pide password actual y confirmación
+        public IActionResult ChangePassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
+        {
+            //Validamos que todo este correcto
+            if (ModelState.IsValid)
+            {
+                //Validacion si contraseña antigua y actual es la misma
+                if (model.OldPassword == model.NewPassword)
+                {
+                    ModelState.AddModelError(string.Empty, "Ingresar contraseña diferente");
+                    return View(model);
+                }
+
+
+
+                //Buscamos el usuario
+                var user = await _userHelper.GetUserAsync(User.Identity.Name);
+                if (user != null)
+                {
+                    var result = await _userHelper.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
+                    if (result.Succeeded)
+                    {
+                        return RedirectToAction("ChangeUser");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, result.Errors.FirstOrDefault().Description);
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Usuario no encontrado");
+                }
+            }
+
+            return View(model);
+        }
+
+
     }
 }

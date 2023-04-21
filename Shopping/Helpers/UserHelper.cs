@@ -67,6 +67,11 @@ namespace Shopping.Helpers
             await _userManager.AddToRoleAsync(user, roleName);
         }
 
+        public async Task<IdentityResult> ChangePasswordAsync(User user, string oldPassword, string newPassword)
+        {
+            return await _userManager.ChangePasswordAsync(user, oldPassword, newPassword);
+        }
+
         public async Task CheckRoleAsync(string roleName)
         {
             //Metodo 
@@ -88,10 +93,23 @@ namespace Shopping.Helpers
         {
             //Se va al contexto datos y busque usuario
             return await _context.Users
-                   //Me devuelve usaurio y ciudad
+                   //Me devuelve usuario y ciudad
                    .Include(u => u.City)
+                   .ThenInclude(c => c.State)
+                   .ThenInclude(s => s.Country)
                    .FirstOrDefaultAsync(u => u.Email == email);
+        }
 
+        public async Task<User> GetUserAsync(Guid userId)
+        {
+            //Se va al contexto datos y busque usuario
+            return await _context.Users
+                   //Me devuelve usuario y ciudad
+                   .Include(u => u.City)
+                   .ThenInclude(c => c.State)
+                   .ThenInclude(s => s.Country)
+                   //El user id sea igual al que me lo pasaron por el parametro
+                   .FirstOrDefaultAsync(u => u.Id == userId.ToString());
         }
 
         public async Task<bool> IsUserInRoleAsync(User user, string roleName)
@@ -111,6 +129,9 @@ namespace Shopping.Helpers
             await _signInManager.SignOutAsync();
         }
 
-        
+        public async Task<IdentityResult> UpdateUserAsync(User user)
+        {
+            return await _userManager.UpdateAsync(user);
+        }
     }
 }

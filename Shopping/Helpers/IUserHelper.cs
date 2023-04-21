@@ -6,8 +6,12 @@ namespace Shopping.Helpers
 {
     public interface IUserHelper
     {
+        //Sobrecargamos GetUserAsync
         // Método GetUserAsync pasaremos el email del usuario y nos devuelve el usuario
         Task<User> GetUserAsync(string email);
+
+        //codigo de usuario es un GUID
+        Task<User> GetUserAsync(Guid userId);
 
         //Método AddUserAsync agregar usuario y pasar el password(mayusucla miniscula caracteres epeciales)
         Task<IdentityResult> AddUserAsync(User user, string password);
@@ -26,6 +30,11 @@ namespace Shopping.Helpers
         Task<SignInResult> LoginAsync(LoginViewModel model);
 
         Task LogoutAsync();
+
+        //Le mandamos usuario password viejo y nuevo
+        Task<IdentityResult> ChangePasswordAsync(User user, string oldPassword, string newPassword);
+
+        Task<IdentityResult> UpdateUserAsync(User user);
 
     }
 }

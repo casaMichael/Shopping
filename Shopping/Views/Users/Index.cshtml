@@ -1,0 +1,204 @@
+﻿@model IEnumerable<Shopping.Data.Entities.User>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
+
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-12">
+            <!-- Header -->
+            <div class="header">
+                <div class="header-body">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <!-- Pretitle -->
+                            <h5 class="header-pretitle">Descripción general</h5>
+                            <h1 class="header-title text-truncate">Usuarios</h1>
+                        </div>
+                        <div class="col-auto">
+                            <!-- Navigation (button group) -->
+                            <div class="nav btn-group d-inline-flex">
+                                <a asp-action="Create" class="btn btn-primary">Nuevo administrador</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Tabla contenido -->
+            <div class="tab-content">
+                <div class="tab-pane fade show active">
+                    <div class="card">
+                        <div class="table-responsive">
+                            <table class="table table-sm table-hover table-nowrap card-table" id="MyTableUser">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <!-- Checkbox 
+                                            <div class="form-check mb-n2">
+                                                <input class="form-check-input list-checkbox-all" id="listCheckboxAll" type="checkbox">
+                                                <label class="form-check-label" for="listCheckboxAll"></label>
+                                            </div>
+                                            -->
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.Document)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.Email)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.FirstName)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.LastName)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.City.State.Country.Name)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.City.State.Name)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.City.Name)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.Address)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.PhoneNumber)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.UserType)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.ImageFullPath)
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody class="list fs-base">
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <!-- Checkbox
+                                                <div class="form-check">
+                                                    <input class="form-check-input list-checkbox" type="checkbox" id="listCheckboxTwentyFour">
+                                                    <label class="form-check-label" for="listCheckboxTwentyFour"></label>
+                                                </div>
+                                                -->
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Document)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Email)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.FirstName)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.LastName)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.City.State.Country.Name)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.City.State.Name)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.City.Name)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Address)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.PhoneNumber)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.UserType)
+                                            </td>
+                                            <td>
+                                                <img src="@item.ImageFullPath" style="width:100px; height:100px; border-radius:50px" />
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="card-footer d-flex justify-content-between">                        
+
+                            <!-- Alert  TODOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO-->
+
+                            <div class="list-alert alert alert-dark alert-dismissible border fade" role="alert">
+
+                                <!-- Content -->
+                                <div class="row align-items-center">
+                                    <div class="col">
+
+                                        <!-- Checkbox -->
+                                        <div class="form-check">
+                                            <input class="form-check-input" id="listAlertCheckbox" type="checkbox" checked="" disabled="">
+                                            <label class="form-check-label text-white" for="listAlertCheckbox">
+                                                <span class="list-alert-count">0</span> deal(s)
+                                            </label>
+                                        </div>
+
+                                    </div>
+                                    <div class="col-auto me-n3">
+
+                                        <!-- Button -->
+                                        <button class="btn btn-sm btn-white-20">
+                                            Edit
+                                        </button>
+
+                                        <!-- Button -->
+                                        <button class="btn btn-sm btn-white-20">
+                                            Delete
+                                        </button>
+
+                                    </div>
+                                </div> <!-- / .row -->
+                                <!-- Close -->
+                                <button type="button" class="list-alert-close btn-close" aria-label="Close"></button>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script src="//cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#MyTableUser').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"
+                },
+                "aLengthMenu": [
+                    [2, 50, 100, 200, -1],
+                    [2, 50, 100, 200, "Todos"]
+                ]
+            });
+        });
+    </script>
+}

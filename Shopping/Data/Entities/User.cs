@@ -6,17 +6,17 @@ namespace Shopping.Data.Entities
 {
     public class User : IdentityUser
     {
-        [Display(Name = "Documento")]
+        [Display(Name = "DNI")]
         [MaxLength(20, ErrorMessage = "El campo {0} debe tener máximo {1} caractéres.")]
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
         public string Document { get; set; }
 
-        [Display(Name = "Nombres")]
+        [Display(Name = "Nombre")]
         [MaxLength(50, ErrorMessage = "El campo {0} debe tener máximo {1} caractéres.")]
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
         public string FirstName { get; set; }
 
-        [Display(Name = "Apellidos")]
+        [Display(Name = "Apellido")]
         [MaxLength(50, ErrorMessage = "El campo {0} debe tener máximo {1} caractéres.")]
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
         public string LastName { get; set; }
@@ -36,13 +36,16 @@ namespace Shopping.Data.Entities
 
         [Display(Name = "Foto")]
         public string ImageFullPath => ImageId == Guid.Empty
-            //Ruta de perf
+            //Usuario no tiene foto cogera la foto de la maquina local
             ? $"https://localhost:7018/assets/img/no-image.png"
-            //Mi blob se llama shoppingcasamichael
+            //Mi blob se llama shoppingcasamichael, aqui cogera la foto de la URL de Azure
             : $"https://shoppingcasamichael.blob.core.windows.net/users/{ImageId}";
 
         [Display(Name = "Tipo de usuario")]
         public UserType UserType { get; set; }
+        
+        [Display(Name = "Contacto")]
+        public string PhoneNumber { get; set; }
 
 
         [Display(Name = "Usuario")]

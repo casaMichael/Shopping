@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="~/assets/css/theme.bundle.css" />
 
     <link rel="icon" href="~/assets/favicon/favicon.ico" />
+    <link rel="icon" href="cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" />
 
 
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
@@ -42,6 +43,9 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-light" asp-area="" asp-controller="Countries" asp-action="Index">Países</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-light" asp-area="" asp-controller="Users" asp-action="Index">Usuarios</a>
                     </li>
                 }
             </ul>
@@ -77,11 +81,6 @@
         </div>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container-fluid">
-            &copy; 2023 - Shopping - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
