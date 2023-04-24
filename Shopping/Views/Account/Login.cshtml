@@ -54,7 +54,7 @@
                         <div class="col-auto">
 
                             <!-- Help text -->
-                            <a href="password-reset-cover.html" class="form-text small text-muted">
+                            <a asp-action="RecoverPassword" class="form-text small text-muted">
                                 ¿Recuperar contraseña?
                             </a>
 
@@ -91,14 +91,10 @@
                     Iniciar
                 </button>
 
-                <a class="btn btn-lg w-100 btn-info mb-3" asp-action="Register">
-                    Registrarse
-                </a>
-
                 <!-- Link -->
                 <div class="text-center">
                     <small class="text-muted text-center">
-                        Don't have an account yet? <a href="sign-up.html">Sign up</a>.
+                        ¿No tienes cuenta? <a asp-action="Register"> Registrate</a>.
                     </small>
                 </div>
 

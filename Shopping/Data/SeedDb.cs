@@ -1,5 +1,6 @@
 ﻿using Shopping.Enums;
 using Shopping.Helpers;
+using Shopping.Migrations;
 
 namespace Shopping.Data.Entities;
 
@@ -25,6 +26,8 @@ public class SeedDb
         //Yopmail correo válido pero falso. Sirve para pruebas.
         await CheckUserAsync("101010", "Michael", "Casa", "casa@yopmail.com", "654 321", "Calle Guadalajara", UserType.Admin);
         await CheckUserAsync("303030", "Alejando", "Ushca", "alex@yopmail.com", "123 456", "Calle Segovia", UserType.User);
+
+
     }
 
     private async Task<User> CheckUserAsync(
@@ -55,6 +58,11 @@ public class SeedDb
 
             await _userHelper.AddUserAsync(user, "123456");
             await _userHelper.AddUserToRoleAsync(user, userType.ToString());
+
+            //El token se lo enviamos al correo, para que cuando el usuario vuelva a confirmar email vuelva con el token.
+            //Estas lineas habilitan el usuario
+            string token = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
+            await _userHelper.ConfirmEmailAsync(user, token);
         }
 
         return user;

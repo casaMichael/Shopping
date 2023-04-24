@@ -4,7 +4,6 @@
     ViewData["Title"] = "Index";
 }
 
-<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
 
 <div class="container-fluid">
     <div class="row justify-content-center">
@@ -32,17 +31,9 @@
                 <div class="tab-pane fade show active">
                     <div class="card">
                         <div class="table-responsive">
-                            <table class="table table-sm table-hover table-nowrap card-table" id="MyTableUser">
+                            <table class="table table-sm table-hover table-nowrap card-table" id="MyTable">
                                 <thead>
                                     <tr>
-                                        <th>
-                                            <!-- Checkbox 
-                                            <div class="form-check mb-n2">
-                                                <input class="form-check-input list-checkbox-all" id="listCheckboxAll" type="checkbox">
-                                                <label class="form-check-label" for="listCheckboxAll"></label>
-                                            </div>
-                                            -->
-                                        </th>
                                         <th>
                                             @Html.DisplayNameFor(model => model.Document)
                                         </th>
@@ -50,10 +41,7 @@
                                             @Html.DisplayNameFor(model => model.Email)
                                         </th>
                                         <th>
-                                            @Html.DisplayNameFor(model => model.FirstName)
-                                        </th>
-                                        <th>
-                                            @Html.DisplayNameFor(model => model.LastName)
+                                            @Html.DisplayNameFor(model => model.FullName)
                                         </th>
                                         <th>
                                             @Html.DisplayNameFor(model => model.City.State.Country.Name)
@@ -74,6 +62,9 @@
                                             @Html.DisplayNameFor(model => model.UserType)
                                         </th>
                                         <th>
+                                            Habilitado
+                                        </th>
+                                        <th>
                                             @Html.DisplayNameFor(model => model.ImageFullPath)
                                         </th>
                                     </tr>
@@ -83,25 +74,14 @@
                                     {
                                         <tr>
                                             <td>
-                                                <!-- Checkbox
-                                                <div class="form-check">
-                                                    <input class="form-check-input list-checkbox" type="checkbox" id="listCheckboxTwentyFour">
-                                                    <label class="form-check-label" for="listCheckboxTwentyFour"></label>
-                                                </div>
-                                                -->
-                                            </td>
-                                            <td>
                                                 @Html.DisplayFor(modelItem => item.Document)
                                             </td>
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.Email)
                                             </td>
                                             <td>
-                                                @Html.DisplayFor(modelItem => item.FirstName)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.LastName)
-                                            </td>
+                                                @Html.DisplayFor(modelItem => item.FullName)
+                                            </td>                                          
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.City.State.Country.Name)
                                             </td>
@@ -119,6 +99,9 @@
                                             </td>
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.UserType)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.EmailConfirmed)
                                             </td>
                                             <td>
                                                 <img src="@item.ImageFullPath" style="width:100px; height:100px; border-radius:50px" />
@@ -190,7 +173,7 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
-            $('#MyTableUser').DataTable({
+            $('#MyTable').DataTable({
                 "language": {
                     "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"
                 },

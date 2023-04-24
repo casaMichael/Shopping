@@ -19,9 +19,13 @@ builder.Services.AddDbContext<DataContext>(o =>
 });
 
 //TODO: Hacer password más fuerte.
-//Mi aplicación va a utilizar Identity, con calse usuario
+//Mi aplicación va a utilizar Identity, con clase usuario
 builder.Services.AddIdentity<User, IdentityRole>(cfg =>
 {
+    //Creador de tokens por defecto
+    cfg.Tokens.AuthenticatorTokenProvider = TokenOptions.DefaultAuthenticatorProvider;
+    //Mis usuarios tienen que ser confirmados
+    cfg.SignIn.RequireConfirmedEmail = true;
     //Usuarios con email único
     cfg.User.RequireUniqueEmail = true;
     //Condiciones de password
@@ -33,13 +37,15 @@ builder.Services.AddIdentity<User, IdentityRole>(cfg =>
     //Longitud requerida de password
     //cfg.Password.RequiredLength = 6;
     //Bloquear usuario durante 1 minuto
-    cfg.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(1);
+    cfg.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
     //Intento 3 veces
     cfg.Lockout.MaxFailedAccessAttempts = 3;
     //Al nuevo usuario tambien lo podemos bloquear
     cfg.Lockout.AllowedForNewUsers = true;
 
-}).AddEntityFrameworkStores<DataContext>();
+})
+    .AddDefaultTokenProviders()
+    .AddEntityFrameworkStores<DataContext>();
 
 //Para mostrar página de autorización
 builder.Services.ConfigureApplicationCookie(options =>
@@ -58,6 +64,7 @@ builder.Services.AddScoped<IUserHelper, UserHelper>();
 //Cada que alguien llame al combo helper pasame la clase combohelper
 builder.Services.AddScoped<ICombosHelper, CombosHelper>();
 builder.Services.AddScoped<IBlobHelper, BlobHelper>();
+builder.Services.AddScoped<IMailHelper, MailHelper>();
 
 //Preparar el BUILD antes de correrlo
 //Cualquier cambio en caliente con esta linea no hay necesidad de ejeuctar y compilar el programa, simplemente refrescar navegador

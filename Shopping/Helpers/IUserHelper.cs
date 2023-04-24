@@ -36,5 +36,17 @@ namespace Shopping.Helpers
 
         Task<IdentityResult> UpdateUserAsync(User user);
 
+        //token cadena larga de numeros y letras que tienen que coincidar para enviar el correo
+        Task<string> GenerateEmailConfirmationTokenAsync(User user);
+
+        //le mando el token y nos manda un IdentityResult: si fue exitoso fallido error
+        Task<IdentityResult> ConfirmEmailAsync(User user, string token);
+
+        //Token de reset
+        Task<string> GeneratePasswordResetTokenAsync(User user);
+
+        // Le pasamos usuario token y nueva contraseña
+        Task<IdentityResult> ResetPasswordAsync(User user, string token, string password);
+
     }
 }
