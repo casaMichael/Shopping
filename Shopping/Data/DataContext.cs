@@ -17,6 +17,9 @@ namespace Shopping.Data
         public DbSet<City> Cities { get; set; }
         public DbSet<Country> Countries { get; set; }
         public DbSet<State> States{ get; set; }
+        public DbSet<Product> Products{ get; set; }
+        public DbSet<ProductCategory> ProductCategories{ get; set; }
+        public DbSet<ProductImage> ProductImages{ get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -31,6 +34,10 @@ namespace Shopping.Data
             modelBuilder.Entity<State>().HasIndex("Name","CountryId").IsUnique();
             //Validamos un unico departamento y unica ciudad y pais
             modelBuilder.Entity<City>().HasIndex("Name","StateId").IsUnique();
+            //Para que no haya dos productos con el mismo nombre
+            modelBuilder.Entity<Product>().HasIndex(c => c.Name).IsUnique();
+            //Para que el mismo producto no pertenezca a la misma categoria más de una vez
+            modelBuilder.Entity<ProductCategory>().HasIndex("ProductId", "CategoryId").IsUnique();
         }
     }
 }

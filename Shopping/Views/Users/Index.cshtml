@@ -1,8 +1,10 @@
 ﻿@model IEnumerable<Shopping.Data.Entities.User>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Usuarios";
 }
+
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
 
 
 <div class="container-fluid">
@@ -31,7 +33,7 @@
                 <div class="tab-pane fade show active">
                     <div class="card">
                         <div class="table-responsive">
-                            <table class="table table-sm table-hover table-nowrap card-table" id="MyTable">
+                            <table class="table table-hover table-hover table-nowrap card-table" id="MyTable">
                                 <thead>
                                     <tr>
                                         <th>
@@ -111,45 +113,6 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class="card-footer d-flex justify-content-between">                        
-
-                            <!-- Alert  TODOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO-->
-
-                            <div class="list-alert alert alert-dark alert-dismissible border fade" role="alert">
-
-                                <!-- Content -->
-                                <div class="row align-items-center">
-                                    <div class="col">
-
-                                        <!-- Checkbox -->
-                                        <div class="form-check">
-                                            <input class="form-check-input" id="listAlertCheckbox" type="checkbox" checked="" disabled="">
-                                            <label class="form-check-label text-white" for="listAlertCheckbox">
-                                                <span class="list-alert-count">0</span> deal(s)
-                                            </label>
-                                        </div>
-
-                                    </div>
-                                    <div class="col-auto me-n3">
-
-                                        <!-- Button -->
-                                        <button class="btn btn-sm btn-white-20">
-                                            Edit
-                                        </button>
-
-                                        <!-- Button -->
-                                        <button class="btn btn-sm btn-white-20">
-                                            Delete
-                                        </button>
-
-                                    </div>
-                                </div> <!-- / .row -->
-                                <!-- Close -->
-                                <button type="button" class="list-alert-close btn-close" aria-label="Close"></button>
-
-                            </div>
-
-                        </div>
                     </div>
                 </div>
             </div>
@@ -178,8 +141,8 @@
                     "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"
                 },
                 "aLengthMenu": [
-                    [2, 50, 100, 200, -1],
-                    [2, 50, 100, 200, "Todos"]
+                    [1, 50, 100, 200, -1],
+                    [1, 50, 100, 200, "Todos"]
                 ]
             });
         });

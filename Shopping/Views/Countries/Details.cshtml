@@ -35,7 +35,9 @@
                             <th>
                                 @Html.DisplayNameFor(model => model.States.FirstOrDefault().CitiesNumber)
                             </th>
-                            <th></th>
+                            <th>
+                                Acciones
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -50,9 +52,9 @@
                                     @Html.DisplayFor(modelItem => item.CitiesNumber)
                                 </td>
                                 <td>
-                                    <a asp-action="EditState" asp-route-id="@item.Id" class="btn btn-outline-warning">Editar</a> |
-                                    <a asp-action="DetailsState" asp-route-id="@item.Id" class="btn btn-outline-info">Detalles</a> |
-                                    <a asp-action="DeleteState" asp-route-id="@item.Id" class="btn btn-outline-danger">Eliminar</a>
+                                    <a asp-action="EditState" asp-route-id="@item.Id" class="btn btn-outline-warning"><i class="fe fe-edit"></i></a>
+                                    <a asp-action="DetailsState" asp-route-id="@item.Id" class="btn btn-outline-info"><i class="fe fe-list"></i></a>
+                                    <a asp-action="DeleteState" asp-route-id="@item.Id" class="btn btn-outline-danger"><i class="fe fe-trash-2"></i></a>
                                 </td>
                             </tr>
                         }

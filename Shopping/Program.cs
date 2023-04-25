@@ -18,6 +18,7 @@ builder.Services.AddDbContext<DataContext>(o =>
     o.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
+
 //TODO: Hacer password más fuerte.
 //Mi aplicación va a utilizar Identity, con clase usuario
 builder.Services.AddIdentity<User, IdentityRole>(cfg =>

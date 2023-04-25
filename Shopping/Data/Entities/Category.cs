@@ -12,6 +12,7 @@ namespace Shopping.Data.Entities
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
         public string Name { get; set; }
 
-        
+        //Una categoria tiene mucho productos
+        public ICollection<ProductCategory> ProductCategories{ get; set; }
     }
 }
