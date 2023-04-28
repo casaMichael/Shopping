@@ -1,13 +1,28 @@
 ﻿@model IEnumerable<Shopping.Data.Entities.Product>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Productos";
 }
 
-<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
+
+<style>
+    .slider {
+        position: relative;
+        overflow: scroll;
+    }
+
+    .slider img {
+        position: sticky;
+        object-fit: cover;
+        border-radius:50px;
+        scroll-snap-align: center;
+    }
+
+</style>
+
 
 <p>
-    <a asp-action="Create" class="btn btn-outline-primary">Crear Nuevo</a>
+    <a asp-action="Create" class="btn btn-outline-primary">Crear producto</a>
 </p>
 <div class="row">
     <div class="col-md-12">
@@ -43,7 +58,7 @@
                             <th></th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id ="slider">
                         @foreach (var item in Model)
                         {
                             <tr>
@@ -65,13 +80,13 @@
                                 <td>
                                     @Html.DisplayFor(modelItem => item.ImagesNumber)
                                 </td>
-                                <td>
+                                <td >
                                     <img src="@item.ImageFullPath" style="width:100px;" />
                                 </td>
                                 <td>
                                     <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-warning"><i class="fe fe-edit"></i></a>
                                     <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-info"><i class="fe fe-list"></i></a>
-                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-danger"><i class="fe fe-trahs-2"></i></a>
+                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-danger"><i class="fe fe-trash-2"></i></a>
                                 </td>
                             </tr>
                         }

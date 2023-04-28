@@ -19,9 +19,9 @@ namespace Shopping.Data.Entities
         public string Description { get; set; }
 
 
-        [DisplayFormat(DataFormatString = "{0:C2}")]
         //Da warning al hacer la update migration... por eso hay que colocar Column ayuda de stackoverflow
         [Column(TypeName = "decimal(18,2)")]
+        [DisplayFormat(DataFormatString = "{0:C2}")]
         [Display(Name = "Precio")]
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
         public decimal Price { get; set; }
@@ -46,7 +46,7 @@ namespace Shopping.Data.Entities
         //TODO: Pending to change to the correct path
         [Display(Name = "Foto")]
         public string ImageFullPath => ProductImages == null || ProductImages.Count == 0
-            ? $"https://localhost:7018/images/no-image.png"
+            ? $"https://localhost:7018/assets/img/no-image.png"
             : ProductImages.FirstOrDefault().ImageFullPath;
 
     }

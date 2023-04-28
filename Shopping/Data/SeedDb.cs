@@ -146,14 +146,14 @@ public class SeedDb
         //Si no hay registros agregame las siguientes categorias
         if (!_context.Categories.Any())
         {
-            _context.Categories.Add(new Category { Name = "Tecnología" });
-            _context.Categories.Add(new Category { Name = "Ropa" });
-            _context.Categories.Add(new Category { Name = "Calzado" });
-            _context.Categories.Add(new Category { Name = "Belleza" });
-            _context.Categories.Add(new Category { Name = "Nutrición" });
-            _context.Categories.Add(new Category { Name = "Deportes" });
-            _context.Categories.Add(new Category { Name = "Mascotas" });
-            _context.Categories.Add(new Category { Name = "Apple" });
+            _context.Categories.Add(new Category { Name = "Portatiles" });
+            _context.Categories.Add(new Category { Name = "PC's" });
+            _context.Categories.Add(new Category { Name = "Monitores" });
+            _context.Categories.Add(new Category { Name = "Teclados" });
+            _context.Categories.Add(new Category { Name = "Ratones" });
+            _context.Categories.Add(new Category { Name = "Alfombrillas" });
+            _context.Categories.Add(new Category { Name = "Auriculares" });
+            _context.Categories.Add(new Category { Name = "Pack Gaming" });
             //Guardame los cambios de forma asincrona
             await _context.SaveChangesAsync();
         }

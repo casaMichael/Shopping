@@ -20,12 +20,19 @@ namespace Shopping.Helpers
 
         public async Task DeleteBlobAsync(Guid id, string containerName)
         {
-            //Referencia el container
-            CloudBlobContainer container = _blobClient.GetContainerReference(containerName);
-            //Referencia el nombre del blob (users/products)
-            CloudBlockBlob blockBlob = container.GetBlockBlobReference($"{id}");
-            //Borrar
-            await blockBlob.DeleteAsync();
+            try
+            {
+                //Referencia el container
+                CloudBlobContainer container = _blobClient.GetContainerReference(containerName);
+                //Referencia el nombre del blob (users/products)
+                CloudBlockBlob blockBlob = container.GetBlockBlobReference($"{id}");
+                //Borrar
+                await blockBlob.DeleteAsync();
+            }
+            catch // Si ya borre la imagen e intento borrar otra vez me sacara este metodo.
+            {
+                throw;
+            }
         }
 
         //IFormFile: captura de imagen por browser

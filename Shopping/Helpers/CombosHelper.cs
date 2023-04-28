@@ -30,6 +30,37 @@ namespace Shopping.Helpers
             return list;
         }
 
+        //Metodo para que no aparezcan la categoria a la que pertenece el producto existente
+        public async Task<IEnumerable<SelectListItem>> GetComboCategoriesAsync(IEnumerable<Category> filter)
+        {
+            List<Category> categories = await _context.Categories.ToListAsync();
+            List<Category> categoriesFiltered = new List<Category>();
+
+            //
+            foreach (Category category in categories)
+            {
+                //Si no existe en el filtro: hay una categoria que sea igual al categori.id es que existe en el filtro
+                if(!filter.Any(c => c.Id == category.Id))
+                {
+                    //Adicionamos la categoría
+                    categoriesFiltered.Add(category);
+                }
+            }
+
+            //Arma categoriasFiltradas que vienen de la base de datos en el select
+            List<SelectListItem> list = categoriesFiltered.Select(c => new SelectListItem
+            {
+                Text = c.Name,
+                Value = c.Id.ToString(),
+            })
+                .OrderBy(c => c.Text)
+                .ToList();
+            //En la lista, insertame en la posicion 0 el siguiente texto
+            list.Insert(0, new SelectListItem { Text = "[Seleccione una categoría]", Value = "0" });
+
+            return list;
+        }
+
         public async Task<IEnumerable<SelectListItem>> GetComboCitiesAsync(int stateId)
         {
             List<SelectListItem> list = await _context.Cities
