@@ -16,6 +16,9 @@ builder.Services.AddDbContext<DataContext>(o =>
 {
     //Configuración base de datos (inyeccion de dependencias)
     o.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+    
+    //Conexion BD SQLServer
+    //builder.Services.AddControllersWithViews();
 });
 
 
