@@ -13,6 +13,7 @@ namespace Shopping.Data
         }
 
         //Por cada entidad hay que mapearlo
+        //Colecciones
         public DbSet<Category> Categories { get; set; }
         public DbSet<City> Cities { get; set; }
         public DbSet<Country> Countries { get; set; }
@@ -20,6 +21,8 @@ namespace Shopping.Data
         public DbSet<Product> Products{ get; set; }
         public DbSet<ProductCategory> ProductCategories{ get; set; }
         public DbSet<ProductImage> ProductImages{ get; set; }
+        
+        public DbSet<TemporalSale> TemporalSales{ get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -14,8 +14,7 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
 
 
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/Shopping.styles.css" asp-append-version="true" />
+
 </head>
 <body>
 
@@ -49,21 +48,24 @@
                 }
             </ul>
                 <div class="navbar-user d-none d-md-flex" id="sidebarUser" >
+                    
                     @if (User.Identity.IsAuthenticated)
                     {
-                    <li class="nav-item">
-                        <a class="nav-link text-light" asp-area="" asp-controller="Account" asp-action="ChangeUser">@User.Identity.Name</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-light" asp-area="" asp-controller="Account" asp-action="Logout">Cerrar Sesión</a>
-                    </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-light" asp-area="" asp-controller="Account" asp-action="ChangeUser">@User.Identity.Name</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-light" asp-area="" asp-controller="Account" asp-action="Logout">Cerrar Sesión</a>
+                        </li>
                     }
-                    else
-                    {
+
+                
+                else
+                {
                     <li class="nav-item">
                         <a class="nav-link text-light" asp-area="" asp-controller="Account" asp-action="Login">Iniciar Sesión</a>
                     </li>
-                    }
+                }
 
                 </div>  
 

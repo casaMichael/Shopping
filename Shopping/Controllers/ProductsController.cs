@@ -25,7 +25,7 @@ namespace Shopping.Controllers
         }
 
         public async Task<IActionResult> Index()
-        {
+        {         
             //Todo esto muestra en el index productos imagenes categorias
             return View(await _context.Products
                 .Include(p => p.ProductImages)

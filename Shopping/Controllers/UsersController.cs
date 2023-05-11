@@ -30,7 +30,7 @@ namespace Shopping.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            //Inner Join mostrado en el Index
+            /*Inner Join mostrado en el Index
             return View(await _context.Users
                 //Relacion (directa) de primer nivel =>       User(N)---->(1)City
                 .Include(u => u.City)
@@ -38,8 +38,15 @@ namespace Shopping.Controllers
                 .ThenInclude(c => c.State)
                 //Relacion de tercer nivel=>       User(N)---->(1)City(N)---->(1)State(N)---->(1)Country
                 .ThenInclude(s => s.Country)
-                .ToListAsync());
+                .ToListAsync());*/
         //Esto es una buena practica a la hora de mapearlo y mostrarlo en el index con puntos linea 35 38 41
+
+
+            //Procedimiento almacenado
+            var GetAllUsers = _context.Users.FromSqlRaw("USUARIOSTODOS").ToList();
+
+            return View(GetAllUsers);
+
         }
 
         //GET Crear nuevo Administrador
