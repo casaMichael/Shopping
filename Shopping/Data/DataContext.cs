@@ -11,7 +11,6 @@ namespace Shopping.Data
         {
 
         }
-
         //Por cada entidad hay que mapearlo
         //Colecciones
         public DbSet<Category> Categories { get; set; }
