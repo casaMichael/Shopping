@@ -21,5 +21,35 @@ body {
   margin-bottom: 60px;
 }
 
-/*      Estilos para HOME    */
+/*Zoom images*/
+/*Arreglar param que section ve bien
 
+.zoom {
+    transition: 1.5s ease;
+    -moz-transition: 1.5s ease;*/ /* Firefox */
+    /*-webkit-transition: 1.5s ease;*/ /* Chrome - Safari */
+    /*-o-transition: 1.5s ease;*/ /* Opera */
+/*}
+
+    .zoom:hover {
+        transform: scale(2);
+        border: 2px solid skyblue;
+        -moz-transform: scale(2);*/ /* Firefox */
+        /*-webkit-transform: scale(1.5);*/ /* Chrome - Safari */
+        /*-o-transform: scale(2);*/ /* Opera */
+        /*-ms-transform: scale(2);*/ /* IE9 */
+    /*}*/
+
+/*Carousel de imagenes*/
+
+.carousel-inner {
+    width: auto;
+    height: 500px;
+    max-height: 500px !important;
+}
+
+.carousel-content {
+    color: black;
+    display: flex;
+    text-align: center;
+}

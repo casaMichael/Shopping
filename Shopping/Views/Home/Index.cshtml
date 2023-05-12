@@ -4,141 +4,56 @@
     ViewData["Title"] = "Index";
 }
 
-<style>
-
-.card {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    width: 300px;
-    height: 370px;
-    border: 1px solid lightgray;
-    box-shadow: 2px 2px 8px 4px #d3d3d3d1;
-    border-radius: 15px;
-    font-family: sans-serif;
-    margin: 5px;
-}
-
-.card_title {
-    font-size: 24px;
-    padding: 10px 10px 0 10px;
-}
-
-.card_body {
-    padding: 10px;
-}
-
-.card_foot {
-    background: #6699ff;
-    border-radius: 0 0 15px 15px;
-    padding: 10px;
-    text-align: center;
-}
-
-.foot a {
-    text-decoration: none;
-    color: white;
-}
-
-.foot a:after {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    z-index: 1;
-    content: ""
-}
-
-
+        
+<style type="text/css">
+    .card {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        border: 1px solid lightgray;
+        box-shadow: 2px 2px 8px 4px #d3d3d3d1;
+        border-radius: 15px;
+        font-family: sans-serif;
+        margin: 5px;
+    }
 </style>
+
 @if (Model.Quantity > 0)
 {
-    
-        <a asp-action="ShowCart" class="fe fe-shopping-cart btn btn-outline-primary"> (@Model.Quantity) </a>
-    
+    <a asp-action="ShowCart" class="fe fe-shopping-cart btn btn-outline-primary"> (@Model.Quantity) </a>
 }
 
-@foreach (var item in Model.Products)
+<div class="row row-cols-1 row-cols-md-4 g-4 mt-1">
+    @if (Model.Products.Count() > 0)
     {
-<div class="row">
-    
-        @if (item.Product1 != null)
+        @foreach (var item in Model.Products)
         {
-            <div class="col-md-3">
-                <div class="card">
-                    <div class="card_title">@item.Product1.Name</div>
-                    <div class="card_body">
-                        <img src="@item.Product1.ImageFullPath" style="height:150px; max-width:280px;" />
-                        <p class="mt-2">
-                            @item.Product1.Description
-                            <h4>@Html.DisplayFor(modelItem => item.Product1.Price)</h4>
-                        </p>
+            <div class="col">
+                <div class="card h-100">
+                    <h2 class="text-center p-xl-3">@item.Name</h2>
+                    <div class="text-center zoom">
+                        <img src="@item.ImageFullPath" style="height:150px; max-width:200px;" class="text-center" alt=@item.Name />
                     </div>
-                    <div class="card_foot">
-                        <a asp-action="Details" asp-route-id="@item.Product1.Id" class="btn btn-secondary">Detalles</a>
-                        <a asp-action="Add" asp-route-id="@item.Product1.Id" class="btn btn-primary">Agregar</a>
+                    <div class="card-body">
+                        <p class="card-text smfnt">@item.Description</p>
+                        <h5 class="text-muted">@Html.DisplayFor(modelItem => item.Price)</h5>
+                    </div>
+                    <div class="card-footer text-center">
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-secondary">Details</a>
+                        <a asp-action="Add" asp-route-id="@item.Id" class="btn btn-sm btn-primary">Add to Cart</a>
                     </div>
                 </div>
             </div>
         }
-        @if (item.Product2 != null)
-        {
-            <div class="col-md-3">
-                <div class="card">
-                    <div class="card_title">@item.Product2.Name</div>
-                    <div class="card_body">
-                        <img src="@item.Product2.ImageFullPath" style="height:150px; max-width:280px;" />
-                        <p class="mt-2">
-                            @item.Product2.Description
-                            <h4>@Html.DisplayFor(modelItem => item.Product2.Price)</h4>
-                        </p>
-                    </div>
-                    <div class="card_foot">
-                        <a asp-action="Details" asp-route-id="@item.Product1.Id" class="btn btn-secondary">Detalles</a>
-                        <a asp-action="Add" asp-route-id="@item.Product1.Id" class="btn btn-primary">Agregar</a>
-                    </div>
-                </div>
-            </div>
-        }
-        @if (item.Product3 != null)
-        {
-            <div class="col-md-3">
-                <div class="card">
-                    <div class="card_title">@item.Product3.Name</div>
-                    <div class="card_body">
-                        <img src="@item.Product3.ImageFullPath" style="height:150px; max-width:280px;" />
-                        <p class="mt-2">
-                            @item.Product3.Description
-                            <h4>@Html.DisplayFor(modelItem => item.Product3.Price)</h4>
-                        </p>
-                    </div>
-                    <div class="card_foot">
-                        <a asp-action="Details" asp-route-id="@item.Product1.Id" class="btn btn-secondary">Detalles</a>
-                        <a asp-action="Add" asp-route-id="@item.Product1.Id" class="btn btn-primary">Agregar</a>
-                    </div>
-                </div>
-            </div>
-        }
-        @if (item.Product4 != null)
-        {
-            <div class="col-md-3">
-                <div class="card">
-                    <div class="card_title">@item.Product4.Name</div>
-                    <div class="card_body">
-                        <img src="@item.Product4.ImageFullPath" style="height:150px; max-width:280px;" />
-                        <p class="mt-2">
-                            @item.Product4.Description
-                            <h4>@Html.DisplayFor(modelItem => item.Product4.Price)</h4>
-                        </p>
-                    </div>
-                    <div class="card_foot">
-                        <a asp-action="Details" asp-route-id="@item.Product1.Id" class="btn btn-secondary">Detalles</a>
-                        <a asp-action="Add" asp-route-id="@item.Product1.Id" class="btn btn-primary">Agregar</a>
-                    </div>
-                </div>
-            </div>
-        }
-    
+    }
+    else
+    {
+        <h3>No hay productos con su criterio de búsqueda</h3>
+    }
 </div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

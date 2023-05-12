@@ -28,33 +28,9 @@ namespace Shopping.Controllers
                 .Include(p => p.ProductCategories)
                 .OrderBy(p => p.Description)
                 .ToListAsync();
-            List<ProductsHomeViewModel> productsHome = new() { new ProductsHomeViewModel() };
-            int i = 1;
-            foreach (Product? product in products)
-            {
-                if (i == 1)
-                {
-                    productsHome.LastOrDefault().Product1 = product;
-                }
-                if (i == 2)
-                {
-                    productsHome.LastOrDefault().Product2 = product;
-                }
-                if (i == 3)
-                {
-                    productsHome.LastOrDefault().Product3 = product;
-                }
-                if (i == 4)
-                {
-                    productsHome.LastOrDefault().Product4 = product;
-                    productsHome.Add(new ProductsHomeViewModel());
-                    i = 0;
-                }
-                i++;
-            }
-
-            //Creamos HomeView model que tiene productoshome (las columnas de 4 productos)
-            HomeViewModel model = new HomeViewModel() { Products = productsHome };
+            
+            //Creamos HomeView model que tiene la lista de productos
+            HomeViewModel model = new () { Products = products };
             //Que nos busque el usuario
             User user = await _userHelper.GetUserAsync(User.Identity.Name);
             if (user != null)
@@ -129,6 +105,91 @@ namespace Shopping.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
+        //GET
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            //Buscamos producto
+            Product product = await _context.Products
+                .Include(p => p.ProductImages)
+                .Include(p => p.ProductCategories)
+                .ThenInclude(pc => pc.Category)
+                .FirstOrDefaultAsync(p => p.Id == id);
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            //Armamos lista de categorias
+            string categories = string.Empty;
+            foreach (ProductCategory? category in product.ProductCategories)
+            {
+                //Concatenamos con ,
+                categories += $"{category.Category.Name}, ";
+            }
+            //A la última le quitamos la ,
+            categories = categories.Substring(0, categories.Length - 2);
+
+            //Adicionamos el producto
+            AddProductToCartViewModel model = new()
+            {
+                Categories = categories,
+                Description = product.Description,
+                Id = product.Id,
+                Name = product.Name,
+                Price = product.Price,
+                ProductImages = product.ProductImages,
+                Quantity = 1,
+                Stock = product.Stock,
+            };
+
+            //Lo mandamos al formulario
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Details(AddProductToCartViewModel model)
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            //Buscamos producto
+            Product product = await _context.Products.FindAsync(model.Id);
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            //Buscamos usuario
+            User user = await _userHelper.GetUserAsync(User.Identity.Name);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            //Agregamos el registro al temporalSale
+            TemporalSale temporalSale = new()
+            {
+                Product = product,
+                Quantity = model.Quantity,
+                Remarks = model.Remarks,
+                User = user
+            };
+
+            _context.TemporalSales.Add(temporalSale);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+
 
 
 
