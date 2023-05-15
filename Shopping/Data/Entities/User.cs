@@ -53,6 +53,11 @@ namespace Shopping.Data.Entities
 
         [Display(Name = "Usuario")]
         public string FullNameWithDocument => $"{FirstName} {LastName} - {Document}";
+
+        //Un usuario puede tener mcuhas ventas
+        public ICollection<Sale> Sales{ get; set; }
+
+
     }
 }
 
