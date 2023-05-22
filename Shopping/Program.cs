@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Shopping.Data;
 using Shopping.Data.Entities;
 using Shopping.Helpers;
-
+using Vereyon.Web;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -64,11 +64,14 @@ builder.Services.AddTransient<SeedDb>();
 //Inyecta la interfaz IUserHelper y cada vez que sea llamado le pasamos UserHelper. Esto es para pruebas unitarias.
 //Se crea una nueva instancia una sola vez por cada request(petición)
 
+//Mensajes flash
+builder.Services.AddFlashMessage();
 builder.Services.AddScoped<IUserHelper, UserHelper>();
 //Cada que alguien llame al combo helper pasame la clase combohelper
 builder.Services.AddScoped<ICombosHelper, CombosHelper>();
 builder.Services.AddScoped<IBlobHelper, BlobHelper>();
 builder.Services.AddScoped<IMailHelper, MailHelper>();
+builder.Services.AddScoped<IOrdersHelper, OrdersHelper>();
 
 //Preparar el BUILD antes de correrlo
 //Cualquier cambio en caliente con esta linea no hay necesidad de ejeuctar y compilar el programa, simplemente refrescar navegador
@@ -110,6 +113,7 @@ app.UseStatusCodePagesWithReExecute("/error/{0}");
 
 //Requiere autenticación debido al login/logout
 app.UseAuthentication();
+
 
 app.MapControllerRoute(
     name: "default",

@@ -1,10 +1,13 @@
 ﻿@model Shopping.Models.HomeViewModel
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Inicio";
 }
 
-        
+<title>@ViewData["Title"]</title>
+
+<flash itemprop="true" />
+
 <style type="text/css">
     .card {
         display: flex;
@@ -17,6 +20,34 @@
         margin: 5px;
     }
 </style>
+<h3>Categorias</h3>
+
+<div class="mb-2">
+    @foreach (var item in Model.Categories)
+    {
+        <span>@item.Name&nbsp;&nbsp;</span>
+    }
+</div>
+
+
+<div class="p-4">
+    <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]" class="btn btn-lg btn-primary"><i class="fe fe-arrow-up-circle"></i> Nombre <i class="fe fe-arrow-down-circle"></i></a>
+    <a asp-action="Index" asp-route-sortOrder="@ViewData["PriceSortParm"]" class="btn btn-lg btn-primary"><i class="fe fe-arrow-up-circle"></i> Precio <i class="fe fe-arrow-down-circle"></i></a>
+</div>
+
+
+
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Buscar por nombre o categoría: <input type="text" name="searchProduct" value="@ViewData["CurrentFilter"]" />
+            <input type="submit" value="Buscar" class="btn btn-warning" />
+            <a asp-action="Index" class="btn btn-success">Ver Todos los Productos</a>
+        </p>
+    </div>
+</form>
+
+
 
 @if (Model.Quantity > 0)
 {
@@ -51,6 +82,29 @@
         <h3>No hay productos con su criterio de búsqueda</h3>
     }
 </div>
+
+@{
+    var prevDisabled = !Model.Products.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.Products.HasNextPage ? "disabled" : "";
+}
+
+<div class="mt-4">
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.Products.PageIndex - 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @prevDisabled">
+    Previous
+</a>
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.Products.PageIndex + 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @nextDisabled">
+    Next
+</a>
+</div>
+
 
 @section Scripts {
     @{

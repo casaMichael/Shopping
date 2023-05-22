@@ -20,6 +20,7 @@
 
 </style>
 
+<title>@ViewData["Title"]</title>
 
 <p>
     <a asp-action="Create" class="btn btn-outline-primary">Crear producto</a>
@@ -101,7 +102,7 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
-    <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+
 
     <script type="text/javascript">
         $(document).ready(function () {

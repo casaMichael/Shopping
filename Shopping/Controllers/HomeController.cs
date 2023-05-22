@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Shopping.Common;
 using Shopping.Data;
 using Shopping.Data.Entities;
 using Shopping.Helpers;
@@ -14,24 +15,98 @@ namespace Shopping.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly DataContext _context;
         private readonly IUserHelper _userHelper;
+        private readonly IOrdersHelper _ordersHelper;
 
-        public HomeController(ILogger<HomeController> logger, DataContext context, IUserHelper userHelper)
+        public HomeController(ILogger<HomeController> logger, DataContext context, IUserHelper userHelper, IOrdersHelper ordersHelper)
         {
             _logger = logger;
             _context = context;
             _userHelper = userHelper;
+            _ordersHelper = ordersHelper;
         }
 
-        public async Task<IActionResult> Index()
+        [HttpGet]
+        [HttpPost]
+        public async Task<IActionResult> Index(
+            string sortOrder,
+            string currentFilter,
+            string searchProduct,
+            int? pageNumber)
         {
-            List<Product>? products = await _context.Products
+            //ordenamos por nombre descendentemente(Sino viene parametro de sortorder, asumimos que viene por nombre)
+            //Comprueba si el contenido tiene un valor nulo o vacio
+            ViewData["NameSortParm"] = string.IsNullOrEmpty(sortOrder) ? "NameDesc" : "";
+            //Ordenamos precio descendente(sortoder viene con valor de price )
+            ViewData["PriceSortParm"] = sortOrder == "Price" ? "PriceDesc" : "Price";
+            ViewData["CurrentFilter"] = searchProduct;
+
+            if (searchProduct != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchProduct = currentFilter;
+            }
+
+            //IQueryable=> consulta en la DB de productos
+            IQueryable<Product> query = _context.Products
+                .Include(p => p.ProductImages)
+                .Include(p => p.ProductCategories)
+                //Mostrar productos disponibles
+                .ThenInclude(pc => pc.Category);
+
+            if (!string.IsNullOrEmpty(searchProduct))
+            {
+                query = query.Where(p =>
+                //ToLower me buscara productos con nombre tanto mayusculas como minisculas
+                (p.Name.ToLower().Contains(searchProduct.ToLower()) ||
+                //Buscamos productos y/o de cualquier categoria
+                 p.ProductCategories.Any(pc => pc.Category.Name.ToLower().Contains(searchProduct.ToLower()))) &&
+                 p.Stock > 0);
+            }
+            else
+            {
+                query = query.Where(p => p.Stock > 0);
+            }
+
+
+            switch (sortOrder)
+            {
+                case "NameDesc":
+                    query = query.OrderByDescending(p => p.Name);
+                    break;
+                case "Price":
+                    query = query.OrderBy(p => p.Price);
+                    break;
+                case "PriceDesc":
+                    query = query.OrderByDescending(p => p.Price);
+                    break;
+                default:
+                    query = query.OrderBy(p => p.Name);
+                    break;
+            }
+
+            //Sin ordenación ni búsqueda
+            /* List<Product> products = await _context.Products
                 .Include(p => p.ProductImages)
                 .Include(p => p.ProductCategories)
                 .OrderBy(p => p.Description)
-                .ToListAsync();
-            
+                //Mostrar productos disponibles
+                .Where(p => p.Stock > 0)
+                .ToListAsync(); */
+
+
+            int pageSize = 4;
+
             //Creamos HomeView model que tiene la lista de productos
-            HomeViewModel model = new () { Products = products };
+            HomeViewModel model = new ()
+            {
+                // ?? validación de nulos
+            Products = await PaginatedList<Product>.CreateAsync(query, pageNumber ?? 1, pageSize),
+            Categories = await _context.Categories.ToListAsync(),
+            };
+
             //Que nos busque el usuario
             User user = await _userHelper.GetUserAsync(User.Identity.Name);
             if (user != null)
@@ -190,7 +265,8 @@ namespace Shopping.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        //[Authorize]
+        //GET
+        [Authorize]
         public async Task<IActionResult> ShowCart()
         {
             User user = await _userHelper.GetUserAsync(User.Identity.Name);
@@ -216,6 +292,35 @@ namespace Shopping.Controllers
             //Lo mandamos a la vista
             return View(model);
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ShowCart(ShowCartViewModel model)
+        {
+            User user = await _userHelper.GetUserAsync(User.Identity.Name);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            model.User = user;
+            model.TemporalSales = await _context.TemporalSales
+                .Include(ts => ts.Product)
+                .ThenInclude(p => p.ProductImages)
+                .Where(ts => ts.User.Id == user.Id)
+                .ToListAsync();
+
+            Response response = await _ordersHelper.ProcessOrderAsync(model);
+            if (response.IsSuccess)
+            {
+                //Lo redireccionamos a la accion OrderSuccess
+                return RedirectToAction(nameof(OrderSuccess));
+            }
+
+            ModelState.AddModelError(string.Empty, response.Message);
+            return View(model);
+        }
+
 
         public async Task<IActionResult> DecreaseQuantity(int? id)
         {
@@ -338,9 +443,11 @@ namespace Shopping.Controllers
             return View(model);
         }
 
-
-
-
+        [Authorize]
+        public IActionResult OrderSuccess()
+        {
+            return View();
+        }
 
     }
 }
