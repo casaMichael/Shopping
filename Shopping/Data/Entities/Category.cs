@@ -14,5 +14,9 @@ namespace Shopping.Data.Entities
 
         //Una categoria tiene mucho productos
         public ICollection<ProductCategory> ProductCategories{ get; set; }
+
+        //Cuantos productos tengo por cada Categoria
+        [Display(Name ="# Productos")]
+        public int ProductsNumber => ProductCategories == null ? 0 : ProductCategories.Count();
     }
 }

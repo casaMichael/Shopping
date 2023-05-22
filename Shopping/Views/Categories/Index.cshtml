@@ -1,61 +1,56 @@
 ﻿@model IEnumerable<Shopping.Data.Entities.Category>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Inicio";
 }
 
+<title>@ViewData["Title"]</title>
 
-<h1>Categorías</h1>
+<flash dismissable="true" />
 
-<p>
-    <a asp-action="Create" class="btn btn-outline-primary btn-lg">Crear</a>
-</p>
-
-<div class="row">
-    <div class="col-md-12">
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <table class="table table-md table-nowrap table-hover color-secondary" id="MyTable">
-                    <thead>
-                        <tr>
-                            <th scope="col">
-                                @Html.DisplayNameFor(model => model.Name)
-                            </th>
-                            <th>
-                                Acciones
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model)
-                        {
-                            <tr>             
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Name)
-                                </td>
-                                <td>
-                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-warning"><i class="fe fe-edit"></i></a> 
-                                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-info"><i class="fe fe-list"></i></a> 
-                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-danger"><i class="fe fe-trash-2"></i></a>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
+<!-- Content Wrapper. Contains page content -->
+<div class="container-fluid">
+    <div class="card mt-2">
+        <div class="card-header text-danger">
+            <i class="fa fa-object-group"></i>  <strong>Categorías</strong>
+        </div>
+        <div class="card-body">
+            <div id="view-all">
+                @await Html.PartialAsync("_ViewAll", Model)
             </div>
         </div>
     </div>
 </div>
+
+<!--modal placeholder. Also you can place this modal form in the _Layout.cshtml
+    Esto nos permite CREAR o EDITAR
+-->
+<div class="modal fade in" tabindex="-1" role="dialog" data-bs-backdrop="static" id="form-modal">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <h5 class="modal-title text-white"></h5>
+                <button type="button" class="btn-close text-white" data-bs-dismiss="modal" aria-label="Close">
+                </button>
+            </div>
+            <div class="modal-body">
+            </div>
+        </div>
+    </div>
+</div>
+
+<partial name="_DeleteDialog" />
 
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 
+    <script src="~/assets/js/showmodal.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
-            $('#MyTable').DataTable({
+            $('#CategoriesTable').DataTable({
                 "language": {
                     "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"
                 },
@@ -65,5 +60,9 @@
                 ]
             });
         });
+    </script>
+
+    <script>
+        sc_deleteDialog.openModal('deleteItem', true, 'btnYesDelete', '/Categories/Delete/', false);
     </script>
 }
