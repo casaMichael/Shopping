@@ -6,6 +6,8 @@ namespace Shopping.Helpers
 {
     public interface IUserHelper
     {
+        Task<User> AddUserAsync(AddUserViewModel model);
+
         //Sobrecargamos GetUserAsync
         // Método GetUserAsync pasaremos el email del usuario y nos devuelve el usuario
         Task<User> GetUserAsync(string email);
@@ -15,7 +17,7 @@ namespace Shopping.Helpers
 
         //Método AddUserAsync agregar usuario y pasar el password(mayusucla miniscula caracteres epeciales)
         Task<IdentityResult> AddUserAsync(User user, string password);
-        Task<User> AddUserAsync(AddUserViewModel model);
+        
 
         //Si no exite un rol lo creara
         Task CheckRoleAsync(string roleName);

@@ -15,6 +15,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="Views\Countries\_ViewAllCities.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="MailKit" Version="4.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.5" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor" Version="2.2.0" />
@@ -32,6 +36,18 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\assets\lib\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\Countries\_ViewAllCities.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Views\Countries\_ViewAllCities.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Views\Countries\_ViewAllCities.cshtml" />
   </ItemGroup>
 
 </Project>

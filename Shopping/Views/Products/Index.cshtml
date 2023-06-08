@@ -1,112 +1,40 @@
 ﻿@model IEnumerable<Shopping.Data.Entities.Product>
 
 @{
-    ViewData["Title"] = "Productos";
+    ViewData["Title"] = "Index";
 }
 
+<flash dismissable="true" />
 
-<style>
-    .slider {
-        position: relative;
-        overflow: scroll;
-    }
-
-    .slider img {
-        position: sticky;
-        object-fit: cover;
-        border-radius:50px;
-        scroll-snap-align: center;
-    }
-
-</style>
-
-<title>@ViewData["Title"]</title>
-
-<p>
-    <a asp-action="Create" class="btn btn-outline-primary">Crear producto</a>
-</p>
-<div class="row">
-    <div class="col-md-12">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">Productos</h3>
-            </div>
-            <div class="panel-body">
-                <table class="table table-hover table-responsive table-striped" id="MyTable">
-                    <thead>
-                        <tr>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Name)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Description)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Price)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Stock)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.CategoriesNumber)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.ImagesNumber)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.ImageFullPath)
-                            </th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody id ="slider">
-                        @foreach (var item in Model)
-                        {
-                            <tr>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Name)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Description)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Price)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Stock)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.CategoriesNumber)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.ImagesNumber)
-                                </td>
-                                <td >
-                                    <img src="@item.ImageFullPath" style="width:100px;" />
-                                </td>
-                                <td>
-                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-warning"><i class="fe fe-edit"></i></a>
-                                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-info"><i class="fe fe-list"></i></a>
-                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-danger"><i class="fe fe-trash-2"></i></a>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
+<!-- Content Wrapper. Contains page content -->
+<div class="container-fluid">
+    <div class="card mt-2">
+        <div class="card-header text-danger">
+            <i class="fa fa-shopping-bag"></i>  <strong>Productos</strong>
+        </div>
+        <div class="card-body">
+            <div id="view-all">
+                @await Html.PartialAsync("_ViewAllProducts", Model)
             </div>
         </div>
     </div>
 </div>
+
+
+<partial name="_AddOrEditDialog" />
+<partial name="_DeleteDialog" />
+
 
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 
+    <script src="~/assets/js/showmodal.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
-            $('#MyTable').DataTable({
+            $('#ProductsTable').DataTable({
                 "language": {
                     "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"
                 },
@@ -116,5 +44,9 @@
                 ]
             });
         });
+    </script>
+
+    <script>
+        sc_deleteDialog.openModal('deleteItem', true, 'btnYesDelete', '/Products/Delete/', false);
     </script>
 }

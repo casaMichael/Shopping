@@ -4,76 +4,46 @@
     ViewData["Title"] = "Details";
 }
 
-<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
+<flash dismissable="true" />
 
 <h1>Detalles</h1>
+
 <div>
     <partial name="_CountryDetails" />
 </div>
 
-
 <div>
-    <a asp-action="AddState" asp-route-id="@Model?.Id" class="btn btn-outline-primary">Agregar Departamento/Estado</a>
-    <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-outline-warning">Editar</a>
-    <a asp-action="Index" class="btn btn-outline-success">Volver</a>
+    <a asp-action="Index" class="btn btn-outline-success"><i class="fe fe-rotate-ccw"></i></a>
 </div>
-<hr/>
-<div class="row">
-    <div class="col-md-12">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">Departamentos/Estados</h3>
-            </div>
+<hr />
 
-            <div class="panel-body">
-                <table class="table table-hover table-responsive table-striped" id="MyTable">
-                    <thead>
-                        <tr>
-                            <th>
-                                @Html.DisplayNameFor(model => model.States.FirstOrDefault().Name)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.States.FirstOrDefault().CitiesNumber)
-                            </th>
-                            <th>
-                                Acciones
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!--Model tiene una coleccion de States-->
-                        @foreach (var item in Model.States)
-                        {
-                            <tr>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Name)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.CitiesNumber)
-                                </td>
-                                <td>
-                                    <a asp-action="EditState" asp-route-id="@item.Id" class="btn btn-outline-warning"><i class="fe fe-edit"></i></a>
-                                    <a asp-action="DetailsState" asp-route-id="@item.Id" class="btn btn-outline-info"><i class="fe fe-list"></i></a>
-                                    <a asp-action="DeleteState" asp-route-id="@item.Id" class="btn btn-outline-danger"><i class="fe fe-trash-2"></i></a>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
+<!-- Content Wrapper. Contains page content -->
+<div class="container-fluid">
+    <div class="card mt-2">
+        <div class="card-header text-danger">
+            <i class="fa fa-globe"></i>  <strong>Estados / Departamentos</strong>
+        </div>
+        <div class="card-body">
+            <div id="view-all">
+                @await Html.PartialAsync("_ViewAllStates", Model)
             </div>
         </div>
     </div>
 </div>
+
+<partial name="_AddOrEditDialog" />
+<partial name="_DeleteDialog" />
 
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 
+    <script src="~/assets/js/showmodal.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
-            $('#MyTable').DataTable({
+            $('#StatesTable').DataTable({
                 "language": {
                     "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"
                 },
@@ -83,5 +53,9 @@
                 ]
             });
         });
+    </script>
+
+    <script>
+        sc_deleteDialog.openModal('deleteItem', true, 'btnYesDelete', '/Countries/DeleteState/', false);
     </script>
 }

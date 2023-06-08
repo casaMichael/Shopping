@@ -1,12 +1,13 @@
 ﻿@model IEnumerable<Shopping.Data.Entities.Category>
 
 @{
-    ViewData["Title"] = "Inicio";
+    ViewData["Title"] = "Categorías";
 }
 
-<title>@ViewData["Title"]</title>
 
 <flash dismissable="true" />
+
+<title>@ViewData["Title"]</title>
 
 <!-- Content Wrapper. Contains page content -->
 <div class="container-fluid">
@@ -22,22 +23,7 @@
     </div>
 </div>
 
-<!--modal placeholder. Also you can place this modal form in the _Layout.cshtml
-    Esto nos permite CREAR o EDITAR
--->
-<div class="modal fade in" tabindex="-1" role="dialog" data-bs-backdrop="static" id="form-modal">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header bg-primary">
-                <h5 class="modal-title text-white"></h5>
-                <button type="button" class="btn-close text-white" data-bs-dismiss="modal" aria-label="Close">
-                </button>
-            </div>
-            <div class="modal-body">
-            </div>
-        </div>
-    </div>
-</div>
+<partial name="_AddOrEditDialog" />
 
 <partial name="_DeleteDialog" />
 

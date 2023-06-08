@@ -14,9 +14,8 @@ namespace Shopping.Models
         public IEnumerable<SelectListItem> Categories { get; set; }
 
         [Display(Name = "Foto")]
-
-        //Producto con o sin foto
         public IFormFile? ImageFile { get; set; }
+        //Producto con o sin foto
 
     }
 }

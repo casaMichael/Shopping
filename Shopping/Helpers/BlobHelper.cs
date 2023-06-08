@@ -58,7 +58,8 @@ namespace Shopping.Helpers
         }
         private async Task<Guid> UploadBlobAsync(Stream stream, string containerName)
         {
-            //Le damos nombre al archivo, el nombre sera un GUID primero por seguridad y segundo que no lo sobreescriban
+            //Le damos nombre al archivo, el nombre sera un GUID primero por seguridad
+            //y segundo que no lo sobreescriban
             Guid name = Guid.NewGuid();
             //Accedemos al container (users/products)
             CloudBlobContainer container = _blobClient.GetContainerReference(containerName);

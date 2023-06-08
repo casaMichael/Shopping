@@ -20,32 +20,45 @@
         margin: 5px;
     }
 </style>
-<h3>Categorias</h3>
+<h2 class="mt-2 text-center">Categorias</h2>
 
-<div class="mb-2">
+<div>
     @foreach (var item in Model.Categories)
     {
-        <span>@item.Name&nbsp;&nbsp;</span>
+        <button class="btn btn-outline-light"> <a href="@Url.Action("Index", "Home", new { searchProduct = item.Name})"><strong> @item.Name&nbsp;</strong></a></button>
     }
 </div>
 
+<hr />
 
-<div class="p-4">
+<div class="row">
+
+
+<div class="col-4 p-4">
     <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]" class="btn btn-lg btn-primary"><i class="fe fe-arrow-up-circle"></i> Nombre <i class="fe fe-arrow-down-circle"></i></a>
     <a asp-action="Index" asp-route-sortOrder="@ViewData["PriceSortParm"]" class="btn btn-lg btn-primary"><i class="fe fe-arrow-up-circle"></i> Precio <i class="fe fe-arrow-down-circle"></i></a>
+
+</div>
+
+    <div class="col-8 p-4">
+
+    
+
+    <form asp-action="Index" method="get">
+        <div class="form-actions no-color">
+            <p>
+                <input type="text" name="searchProduct" value="@ViewData["CurrentFilter"]" />
+                <input type="submit" value="Buscar" class="btn btn-warning" />
+                <a asp-action="Index" class="btn btn-success">Ver Todos los Productos</a>
+            </p>
+        </div>
+    </form>
+    </div>
+
 </div>
 
 
 
-<form asp-action="Index" method="get">
-    <div class="form-actions no-color">
-        <p>
-            Buscar por nombre o categoría: <input type="text" name="searchProduct" value="@ViewData["CurrentFilter"]" />
-            <input type="submit" value="Buscar" class="btn btn-warning" />
-            <a asp-action="Index" class="btn btn-success">Ver Todos los Productos</a>
-        </p>
-    </div>
-</form>
 
 
 

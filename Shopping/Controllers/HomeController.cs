@@ -266,7 +266,7 @@ namespace Shopping.Controllers
         }
 
         //GET
-        [Authorize]
+        //[Authorize]
         public async Task<IActionResult> ShowCart()
         {
             User user = await _userHelper.GetUserAsync(User.Identity.Name);

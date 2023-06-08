@@ -1,87 +1,52 @@
 ﻿@model IEnumerable<Shopping.Data.Entities.Country>
 
 @{
-    ViewData["Title"] = "Países";
+    ViewData["Title"] = "Paises";
 }
 
+<flash dismissable="true" />
 
+<title>@ViewData["Title"]</title>
 
-
-<div class="row">
-    <div class="col-md-12">
-        <!-- Header -->
-        <div class="header">
-            <div class="header-body">
-                <div class="row align-items-center">
-                    <div class="col">
-                        <!-- Pretitle -->
-                        <h5 class="header-pretitle">Descripción general</h5>
-                        <h1 class="header-title text-truncate">@ViewData["Title"]</h1>
-                    </div>
-                    <div class="col-auto">
-                        <!-- Navigation (button group) -->
-                        <div class="nav btn-group d-inline-flex">
-                            <a asp-action="Create" class="btn btn-primary">Nuevo País</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+<!-- Content Wrapper. Contains page content -->
+<div class="container-fluid">
+    <div class="card mt-2">
+        <div class="card-header text-danger">
+            <i class="fa fa-globe"></i>  <strong>Países</strong>
         </div>
-
-
-            <div class="panel-body">
-                <table class="table table-hover table-responsive table-striped" id="MyTable">
-                    <thead>
-                        <tr>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Name)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.StatesNumber)
-                            </th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model)
-                        {
-                            <tr>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Name)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.StatesNumber)
-                                </td>
-                                <td>
-                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-warning"><i class="fe fe-edit"></i></a>
-                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-info"><i class="fe fe-list"></i></a>
-                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-danger"><i class="fe fe-trash-2"></i></a>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
+        <div class="card-body">
+            <div id="view-all">
+                @await Html.PartialAsync("_ViewAll", Model)
             </div>
         </div>
     </div>
+</div>
+
+<partial name="_AddOrEditDialog" />
+<partial name="_DeleteDialog" />
 
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
-    <script src="//cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+
+    <script src="~/assets/js/showmodal.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
-            $('#MyTable').DataTable({
+            $('#CountriesTable').DataTable({
                 "language": {
                     "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"
                 },
                 "aLengthMenu": [
-                    [1, 50, 100, 200, -1],
-                    [1, 50, 100, 200, "Todos"]
+                    [25, 50, 100, 200, -1],
+                    [25, 50, 100, 200, "Todos"]
                 ]
             });
         });
+    </script>
+
+    <script>
+        sc_deleteDialog.openModal('deleteItem', true, 'btnYesDelete', '/Countries/Delete/', false);
     </script>
 }

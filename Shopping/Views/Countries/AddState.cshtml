@@ -1,31 +1,25 @@
-﻿@model Shopping.Models.StateViewModel;
+﻿@model Shopping.Models.StateViewModel
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Nueva comunidad/estado";
+    Layout = null;
 }
 
-<h1>Crear</h1>
+<flash dismissable="true" />
 
-<h4>Departamento</h4>
-<hr />
-<div class="row">
-    <div class="col-md-12">
-        <form asp-action="AddState">
+<div class="container smfont">
+    <form asp-action="AddState" autocomplete="off" asp-route-id="@Model.Id" onsubmit="return jQueryAjaxPost(this);">
+        <div class="box-body">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <!--Codigo de País necesario en el post para manipularlo en la vista-->
             <input type="hidden" asp-for="CountryId" />
             <partial name="_State" />
-
-            <div class="form-group mt-2">
-                <input type="submit" value="Crear" class="btn btn-outline-primary" />
-
-                <!--Lo regresamos a la vista Details-->
-                <a asp-action="Details" asp-route-id="@Model?.CountryId" class="btn btn-outline-success">Volver</a>
-            </div>
-        </form>
-    </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-sm btn-primary" data-bs-dismiss="modal"><i class="fa fa-ban"></i> Cancelar</button>
+            <button type="submit" class="btn btn-sm btn-success"><i class="fa fa-save"></i> Guardar</button>
+        </div>
+    </form>
 </div>
-<br />
 
 @section Scripts {
     @{

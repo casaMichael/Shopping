@@ -1,4 +1,5 @@
 ﻿<!DOCTYPE html>
+
 <html lang="es">
 <head>
     <meta charset="utf-8" />
@@ -27,47 +28,55 @@
         <div class="container-fluid">
             <!-- Logotipo-->
             <a class="navbar-brand fe fe-home" asp-area="" asp-controller="Home" asp-action="Index"> CasaGaming</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+
+            <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
+                <span class="fe fe-list"></span>
             </button>
+
+
+            <div class="navbar-collapse collapse show" id="sidebarCollapse">
             <ul class="navbar-nav flex-grow-1">
                 <li class="nav-item">
-                    <a class="nav-link text-white fe fe-shield" asp-area="" asp-controller="Home" asp-action="Privacy">Políticas</a>
+                    <a class="nav-link text-white fe fe-shield" asp-area="" asp-controller="Home" asp-action="Privacy">&nbsp;Políticas</a>
                 </li>
                 @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
                 {
                     <li class="nav-item">
-                        <a class="nav-link text-light fe fe-grid" asp-area="" asp-controller="Categories" asp-action="Index"> Categorías</a>
+                        <a class="nav-link text-light fe fe-grid" asp-area="" asp-controller="Categories" asp-action="Index">&nbsp;Categorías</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-light fe fe-flag" asp-area="" asp-controller="Countries" asp-action="Index"> Países</a>
+                        <a class="nav-link text-light fe fe-flag" asp-area="" asp-controller="Countries" asp-action="Index">&nbsp;Países</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-light fe fe-shopping-bag" asp-area="" asp-controller="Products" asp-action="Index"> Productos</a>
+                        <a class="nav-link text-light fe fe-shopping-bag" asp-area="" asp-controller="Products" asp-action="Index">&nbsp;Productos</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-light fe fe-users" asp-area="" asp-controller="Users" asp-action="Index"> Usuarios </a>
+                        <a class="nav-link text-light fe fe-users" asp-area="" asp-controller="Users" asp-action="Index">&nbsp;Usuarios </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-light fe fe-truck" asp-area="" asp-controller="Orders" asp-action="Index"> Pedidos </a>
+                        <a class="nav-link text-light fe fe-truck" asp-area="" asp-controller="Orders" asp-action="Index">&nbsp;Pedidos </a>
                     </li>
                 }
                 @if(User.Identity.IsAuthenticated && User.IsInRole("User"))
                 {
                     <li class="nav-item">
-                        <a class="nav-link text-light fe fe-truck" asp-area="" asp-controller="Orders" asp-action="MyOrders"> Mis pedidos </a>
+                        <a class="nav-link text-light fe fe-truck" asp-area="" asp-controller="Orders" asp-action="MyOrders">&nbsp;Mis pedidos </a>
                     </li>
                 }
 
 
-            </ul>
-                <div class="navbar-user d-none d-md-flex" id="sidebarUser" >
+                </ul>
+            </div>
+                <div class="navbar-user d-md-none" id="sidebarUser" >
+                    <div class="dropdown>
+
                     
                     @if (User.Identity.IsAuthenticated)
                     {
+
                         <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="" asp-controller="Account" asp-action="ChangeUser">@User.Identity.Name</a>
+                            <a class="nav-link text-light dropdown-toggle" asp-area="" asp-controller="Account" asp-action="ChangeUser">@User.Identity.Name</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-light" asp-area="" asp-controller="Account" asp-action="Logout">Cerrar Sesión</a>
@@ -81,7 +90,7 @@
                         <a class="nav-link text-light" asp-area="" asp-controller="Account" asp-action="Login">Iniciar Sesión</a>
                     </li>
                 }
-
+                </div>
                 </div>  
 
          </div>

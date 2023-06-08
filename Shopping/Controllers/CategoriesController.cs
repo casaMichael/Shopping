@@ -75,23 +75,24 @@ namespace Shopping.Controllers
             return View(category);
         }*/
         
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null || _context.Categories == null)
-            {
-                return NotFound();
-            }
+        // No tiene sentido ir a detalles, si ya lo muestro en inicio y ventanas modales
+        //public async Task<IActionResult> Details(int? id)
+        //{
+        //    if (id == null || _context.Categories == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            var category = await _context.Categories
-                .FirstOrDefaultAsync(m => m.Id == id);
-            //Si es nulo retorna notfound
-            if (category == null)
-            {
-                return NotFound();
-            }
-            //Si existe retorna la vista country
-            return View(category);
-        }
+        //    var category = await _context.Categories
+        //        .FirstOrDefaultAsync(m => m.Id == id);
+        //    //Si es nulo retorna notfound
+        //    if (category == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    //Si existe retorna la vista country
+        //    return View(category);
+        //}
          /*
         public async Task<IActionResult> Edit(int? id)
         {
@@ -214,6 +215,7 @@ namespace Shopping.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        //GET
         [NoDirectAccess]
         public async Task<IActionResult> AddOrEdit(int id = 0) //Valor por defecto es 0, retornara vista con nueva categoría
         {
